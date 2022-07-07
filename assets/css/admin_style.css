@@ -1,0 +1,265 @@
+.ecurrency-assets-admin-page .pg-title {
+  display: inline;
+}
+
+.ecurrency-assets-admin-page .cta a {
+  color: #21759b;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.ecurrency-assets-admin-page table td {
+  vertical-align: middle;
+}
+
+.local-banks-page .cta a {
+  color: #21759b;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.local-banks-page table td {
+  vertical-align: middle;
+}
+
+.local-bank-update-form .btn-cancel {
+  color: red;
+  border-color: red;
+}
+
+.create-new-assets-page .field-info {
+  font-size: 0.75rem;
+}
+
+.support-admin-page {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+.support-admin-page .support-items-wrapper {
+  height: 100vh;
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.support-admin-page .support-items-wrapper .tickets-area {
+  width: 30%;
+  height: 100%;
+}
+
+.support-admin-page .support-items-wrapper .tickets-area .tickets-form form .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.support-admin-page .support-items-wrapper .tickets-area .tickets-form form .form-group label {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0.5rem 0;
+  cursor: context-menu;
+}
+
+.support-admin-page .support-items-wrapper .tickets-area .tickets-form form .form-group textarea {
+  width: 100%;
+  height: 150px;
+  resize: none;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area {
+  width: 35%;
+  height: 90%;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets {
+  margin: 2rem 1rem;
+  padding: 1.5rem;
+  background-color: white;
+  border: none;
+  -webkit-box-shadow: 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+          box-shadow: 0.5rem 0.5rem 0.5rem rgba(0, 0, 0, 0.2);
+  border-radius: 0.5rem;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets .single-tickets-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets p {
+  font-size: 1rem;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets .ticket-ctas span {
+  cursor: pointer;
+  color: white;
+  margin-right: 0.5rem;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets .ticket-ctas span a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.support-admin-page .support-items-wrapper .existing-tickets-area .single-tickets-area .single-tickets .ticket-ctas :nth-child(2) a {
+  color: red;
+}
+
+.support-admin-page .support-items-wrapper .chats-area {
+  width: 35%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 0 1rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages {
+  width: 100%;
+  height: 75%;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 0.5rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .zero-chats-notice {
+  text-align: center;
+  font-weight: 1.5rem;
+  color: #111111;
+  margin-top: 2rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .customer-chat {
+  background-color: #d3d3d3;
+  float: left;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .admin-chat {
+  background-color: #cef0ff;
+  float: right;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .single-chat-message {
+  width: 60%;
+  padding: 1rem;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .single-chat-message .message-body {
+  font-size: 1rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .single-chat-message a {
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: bold;
+  color: #21759b;
+  display: block;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .single-chat-message .message-details {
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .single-chat-message .message-details .message-sender {
+  color: #21759b;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .first-message {
+  width: 90%;
+  background-color: #222222;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .first-message .ticket-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+  width: 80%;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .first-message p {
+  font-size: 1rem;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .first-message .ticket-details {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-messages .first-message .ticket-details .ticket-requester {
+  color: #21759b;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-form form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-form form div {
+  width: 70%;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-form form div textarea {
+  width: 100%;
+  height: 100px;
+  resize: none;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-form form .submit {
+  width: 25%;
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+}
+
+.support-admin-page .support-items-wrapper .chats-area .chat-form form .submit button {
+  width: 100%;
+}
+/*# sourceMappingURL=admin_style.css.map */

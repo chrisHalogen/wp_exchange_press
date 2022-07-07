@@ -1,0 +1,285 @@
+$wordpress_primary_blue : #21759b;
+
+// Ecurrency Assets Page
+.ecurrency-assets-admin-page{
+
+    .pg-title{
+        display: inline;
+    }
+
+
+    .cta{
+        a{
+            color: $wordpress_primary_blue;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    }
+
+    table{
+        td{
+            vertical-align: middle;
+        }
+    }
+}
+
+
+// Local Banks Page
+.local-banks-page{
+
+    .cta{
+        a{
+            color: $wordpress_primary_blue;
+            font-weight: bold;
+            text-decoration: none;
+        }
+    }
+
+    table{
+        td{
+            vertical-align: middle;
+        }
+    }
+}
+
+.local-bank-update-form{
+    .btn-cancel{
+        color: red;
+        border-color: red;
+    }
+}
+
+.create-new-assets-page{
+
+    .field-info{
+        font-size: 0.75rem;
+    }
+}
+
+.support-admin-page{
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    .support-items-wrapper{
+        height: 100vh;
+        width: 100%;
+        
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .tickets-area{
+            width: 30%;
+            height: 100%;
+            
+            .tickets-form{
+
+                form{
+
+                    .form-group{
+                        display: flex;
+                        flex-direction: column;
+
+                        label{
+                            font-size: 1rem;
+                            font-weight: 500;
+                            margin: 0.5rem 0;
+                            cursor: context-menu;
+                        }
+
+                        textarea{
+                            width: 100%;
+                            height: 150px;
+                            resize: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        // color: rgb(102, 255, 102);
+        // color: rgb(255, 170, 170);
+
+        .existing-tickets-area{
+            width: 35%;
+            height: 90%;
+    
+            .single-tickets-area{
+
+                width: 100%;
+                height: 100%;
+
+                overflow-y: auto;
+
+                .single-tickets{
+                    margin:2rem 1rem;
+                    padding: 1.5rem;
+                    background-color: white;
+                    border: none;
+                    box-shadow: 0.5rem 0.5rem 0.5rem rgba($color: #000000, $alpha: 0.2);
+                    border-radius: 0.5rem;
+
+                    .single-tickets-title{
+                        font-size: 1.5rem;
+                        font-weight: 400;
+                    }
+
+                    p{
+                        font-size: 1rem;
+                    }
+
+                    .ticket-ctas{
+
+                        span{
+                            cursor: pointer;
+                            color: white;
+                            margin-right: 0.5rem;
+
+                            a{
+                                text-decoration: none;
+                                color: white;
+                                cursor: pointer;
+                            }
+                        }
+
+                        :nth-child(2){
+
+                            a{
+                                color:red;
+                            }
+                            
+                        }
+                    }
+                }
+
+            } 
+        }
+
+        .chats-area{
+            width: 35%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0 1rem;
+
+            .chat-messages{
+                width: 100%;
+                height: 75%;
+                overflow-y: auto;
+                background-color: white;
+                border-radius: 0.5rem;
+
+                .zero-chats-notice{
+                    text-align: center;
+                    font-weight: 1.5rem;
+                    color: rgb(17, 17, 17);
+                    margin-top: 2rem;
+                }
+
+                .customer-chat{
+                    background-color: #d3d3d3;
+                    float: left;
+                }
+
+                .admin-chat{
+                    background-color: #cef0ff;
+                    float: right;
+                }
+
+                .single-chat-message{
+                    width: 60%;
+                    padding: 1rem;
+                    margin: 0.5rem;
+                    border-radius: 0.5rem;
+
+                    .message-body{
+                        font-size: 1rem;
+                    }
+
+                    a{
+                        text-decoration: none;
+                        cursor: pointer;
+                        font-weight: bold;
+                        color: $wordpress_primary_blue;
+                        display: block;
+                    }
+
+                    .message-details{
+                        font-size: 0.8rem;
+                        font-weight: bold;
+
+                        .message-sender{
+                            color: #21759b;
+                        }
+                    }
+
+                }
+
+                .first-message{
+                    width: 90%;
+                    background-color: #222222;
+                    color: white;
+                    text-align: center;
+                    padding: 1rem;
+
+                    .ticket-title{
+                        font-size: 1.25rem;
+                        font-weight: bold;
+                        width: 80%;
+                    }
+
+                    p{
+                        font-size: 1rem;
+                    }
+
+                    .ticket-details{
+                        font-size: 0.8rem;
+                        font-weight: 500;
+
+                        .ticket-requester{
+                            color: #21759b;
+                        }
+                    }
+                }
+            }
+
+            .chat-form{
+
+                form{
+                    display: flex;
+                    justify-content: space-between;
+                    flex-direction: row;
+                    align-items: flex-start;
+
+                    div{
+                        width: 70%;
+
+                        textarea{
+                            width: 100%;
+                            height: 100px;
+                            resize: none;
+                        }
+
+                    }
+
+                    .submit{
+                        width: 25%;
+                        padding: 0;
+                        display: flex;
+                        align-items: flex-start;
+
+                        button{
+                            width: 100%;
+
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+    }
+}
