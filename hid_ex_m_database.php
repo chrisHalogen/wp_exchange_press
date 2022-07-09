@@ -891,6 +891,13 @@ function hid_ex_m_get_recent_support_chat_data( $time, $ticket_id ){
 
 // Page Specific Data
 
+// Comparison function
+function date_compare($element1, $element2) {
+    $datetime1 = strtotime($element1->time_stamp);
+    $datetime2 = strtotime($element2->time_stamp);
+    return $datetime1 - $datetime2;
+}
+
 function hid_ex_m_get_dashboard_data($user_id){
 
     // Initializing results
@@ -942,12 +949,12 @@ function hid_ex_m_get_dashboard_data($user_id){
 
     if (count($all_orders) > 1){
 
-        // Comparison function
-        function date_compare($element1, $element2) {
-            $datetime1 = strtotime($element1->time_stamp);
-            $datetime2 = strtotime($element2->time_stamp);
-            return $datetime1 - $datetime2;
-        } 
+        // // Comparison function
+        // function date_compare($element1, $element2) {
+        //     $datetime1 = strtotime($element1->time_stamp);
+        //     $datetime2 = strtotime($element2->time_stamp);
+        //     return $datetime1 - $datetime2;
+        // } 
         
         // Sort the array 
         usort($all_orders, 'date_compare');
@@ -955,7 +962,6 @@ function hid_ex_m_get_dashboard_data($user_id){
     }
 
     
-
     // array_slice(array, start, length, preserve)
 
     if (count($all_orders) > 5){
@@ -973,8 +979,7 @@ function hid_ex_m_get_dashboard_data($user_id){
         'total_sold'            => $total_sold,
         'total_transactions'    => $total_transactions,
         'pending_payments'      => $pending_payments,
-        '
-        announcements'         => $announcements,
+        'announcements'         => $announcements,
         'orders'                => $all_orders
     );
 
@@ -1051,11 +1056,11 @@ function hid_ex_m_get_user_history_data($user_id){
     if (count($all_orders) > 1){
 
         // Comparison function
-        function date_compare($element1, $element2) {
-            $datetime1 = strtotime($element1->time_stamp);
-            $datetime2 = strtotime($element2->time_stamp);
-            return $datetime1 - $datetime2;
-        } 
+        // function date_compare($element1, $element2) {
+        //     $datetime1 = strtotime($element1->time_stamp);
+        //     $datetime2 = strtotime($element2->time_stamp);
+        //     return $datetime1 - $datetime2;
+        // } 
         
         // Sort the array 
         usort($all_orders, 'date_compare');
@@ -1063,4 +1068,14 @@ function hid_ex_m_get_user_history_data($user_id){
     }
 
     return $all_orders;
+}
+
+function hid_ex_m_get_customer_support_tickets($customer_id){
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_supports_ticket';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name WHERE customer='$customer_id' AND ticket_status='1' ORDER BY last_activity DESC");
+
+    return $result;
 }

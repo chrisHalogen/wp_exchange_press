@@ -39,7 +39,8 @@
   text-align: center;
   font-weight: 900;
   padding-bottom: 0.25rem;
-  font-size: 2rem;
+  font-weight: 900;
+  font-size: 3rem;
 }
 
 .ex-m-auth-page .ex-m-auth-wrapper .divider-container {
@@ -103,7 +104,8 @@
 .ex-m-auth-page .ex-m-auth-wrapper form .form-group label {
   display: block;
   font-weight: 600;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 1.25rem;
   padding-bottom: 0.5rem;
 }
 
@@ -113,7 +115,8 @@
 .ex-m-auth-page .ex-m-auth-wrapper form .form-group input[type="email"] {
   display: block;
   width: 100%;
-  font-size: 1rem;
+  font-weight: 400;
+  font-size: 1.25rem;
   padding: 0.75rem;
   border-radius: 0.5rem;
   outline: none;
@@ -136,7 +139,8 @@
 .ex-m-auth-page .ex-m-auth-wrapper form .form-group .description {
   margin-top: 0.25rem;
   font-weight: 300;
-  font-size: 0.75rem;
+  font-weight: 300;
+  font-size: 0.9rem;
   margin-bottom: 0;
 }
 
@@ -144,7 +148,8 @@
   margin-top: 0;
   display: none;
   color: red;
-  font-size: 0.75rem;
+  font-weight: 300;
+  font-size: 0.9rem;
   font-weight: bold;
 }
 
@@ -249,8 +254,179 @@
   color: #01381d;
 }
 
+.hid_ex_m_currency-calculator {
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25);
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 2147483647;
+  display: none;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-transition: 1s ease;
+  transition: 1s ease;
+}
+
+.hid_ex_m_currency-calculator .inner-div {
+  width: 50%;
+  height: 80%;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  position: relative;
+  overflow-y: auto;
+}
+
+@media (max-width: 950px) {
+  .hid_ex_m_currency-calculator .inner-div {
+    width: 80%;
+  }
+}
+
+@media (max-width: 950px) {
+  .hid_ex_m_currency-calculator .inner-div {
+    width: 95%;
+  }
+}
+
+.hid_ex_m_currency-calculator .inner-div #close-rate-calculator {
+  font-size: 2rem;
+  position: absolute;
+  right: 1.5rem;
+  top: 1rem;
+  color: #025e30;
+  cursor: pointer;
+}
+
+.hid_ex_m_currency-calculator .inner-div form {
+  width: 100%;
+  height: 100%;
+}
+
+.hid_ex_m_currency-calculator .inner-div form h1 {
+  font-weight: 900;
+  font-size: 3rem;
+  color: #025e30;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.hid_ex_m_currency-calculator .inner-div form p {
+  font-weight: 400;
+  font-size: 1.25rem;
+  margin: 0;
+  padding: 0;
+}
+
+.hid_ex_m_currency-calculator .inner-div form h2 {
+  font-weight: 600;
+  font-size: 1.75rem;
+  color: #242424;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+@media (max-width: 480px) {
+  .hid_ex_m_currency-calculator .inner-div form .modal-content {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div {
+  width: 50%;
+  height: 100%;
+}
+
+@media (max-width: 480px) {
+  .hid_ex_m_currency-calculator .inner-div form .modal-content .input-div {
+    width: 100%;
+  }
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div .asset-radio-buttons {
+  width: 100%;
+  padding: 1rem;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div .asset-radio-buttons label {
+  display: block;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div .asset-radio-buttons #checker-1 {
+  margin-bottom: 0.25rem;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div .asset-radio-buttons input[type='radio'] {
+  accent-color: #025e30;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div #asset-selection {
+  margin: 1rem 0;
+  width: 100%;
+  padding: 0.5rem;
+  padding-right: 2rem;
+  font-weight: 400;
+  font-size: 1.25rem;
+  outline: none;
+  background-color: #ebebeb;
+  border: 2px solid #ebebeb;
+  border-radius: 0.5rem;
+  line-height: 100%;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .input-div input[type='text'] {
+  margin: 1rem 0;
+  width: 100%;
+  padding: 0.5rem;
+  font-weight: 400;
+  font-size: 1.25rem;
+  outline: none;
+  background-color: #ebebeb;
+  border: 2px solid #ebebeb;
+  border-radius: 0.5rem;
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .output-div {
+  width: 50%;
+  height: 100%;
+  padding-left: 2rem;
+}
+
+@media (max-width: 480px) {
+  .hid_ex_m_currency-calculator .inner-div form .modal-content .output-div {
+    width: 100%;
+  }
+}
+
+.hid_ex_m_currency-calculator .inner-div form .modal-content .output-div h2 {
+  font-weight: 900;
+  font-size: 3rem;
+  text-align: center;
+  color: #025e30;
+}
+
 .dashboard-wrapper {
-  margin-top: -2rem;
   width: 100%;
   min-height: 100vh;
   display: -webkit-box;
@@ -324,7 +500,7 @@
 
 .dashboard-wrapper .nav-bar .navigation-menu ul li a {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   text-decoration: none;
   padding: 0.5rem 0.75rem;
   display: block;
@@ -363,19 +539,19 @@
 
 .dashboard-wrapper .content-area .inner-content-area .tab-title {
   font-weight: 900;
-  font-size: 2rem;
+  font-size: 3rem;
   margin-bottom: 0.5rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .tab-sub-title {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   margin-bottom: 1.5rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .section-title {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   margin-bottom: 0.5rem;
 }
 
@@ -414,8 +590,9 @@
 
 .dashboard-wrapper .content-area .inner-content-area .account-summary .summary-card span {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   letter-spacing: 2px;
+  width: 80px;
 }
 
 @media (max-width: 950px) {
@@ -434,7 +611,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .account-summary .summary-card p {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .quick-links {
@@ -455,7 +632,7 @@
   border-radius: 1rem;
   padding: 0.5rem 2rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
@@ -490,7 +667,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .history-wrapper .table-container table {
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .history-wrapper .table-container table td {
@@ -503,7 +680,7 @@
   color: #ffffff;
   font-weight: bold;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: 1px solid #54585d;
 }
 
@@ -527,7 +704,7 @@
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .history-wrapper .table-container a span {
   color: #025e30;
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   display: block;
   text-align: center;
   margin-top: 0.5rem;
@@ -552,6 +729,7 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  margin-bottom: 1rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .latest-announcements .announcements-wrapper .single-announcement i {
@@ -567,20 +745,20 @@
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .latest-announcements .announcements-wrapper .single-announcement .title-sub h2 {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #025e30;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .latest-announcements .announcements-wrapper .single-announcement .title-sub span {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .history-announcements-wrapper .latest-announcements .announcements-wrapper .single-announcement .announcement-CTA {
   float: right;
   color: #025e30;
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   width: 15%;
 }
 
@@ -613,7 +791,7 @@
   border-radius: 1rem;
   padding: 0.5rem 2rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
@@ -634,7 +812,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .currency-rates-wrapper .table-container table {
   border-collapse: collapse;
-  font-size: 0.8rem;
+  font-size: 1rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .currency-rates-wrapper .table-container table td {
@@ -647,8 +825,9 @@
   color: #ffffff;
   font-weight: bold;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: 1px solid #54585d;
+  line-height: 100%;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .currency-rates-wrapper .table-container table tbody td {
@@ -675,7 +854,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form h2 {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .section-divider {
@@ -693,7 +872,7 @@
   border-radius: 1rem;
   padding: 0.5rem 2rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
@@ -710,7 +889,7 @@
   display: none;
   color: red;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
@@ -718,7 +897,7 @@
   color: green;
   display: none;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
@@ -729,7 +908,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: none;
 }
 
@@ -741,7 +920,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: none;
 }
 
@@ -754,7 +933,8 @@
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .form-group .description {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .form-group #selected-asset {
@@ -764,13 +944,13 @@
   border: 1px solid #01381d;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   line-height: 100%;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .form-group .label-paragraph {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #242424;
   width: 300px;
 }
@@ -810,7 +990,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .form-group .proof-upload p {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .order-wrapper #order-form .form-group .proof-upload button {
@@ -819,7 +999,7 @@
   border-radius: 1rem;
   padding: 0.25rem 1rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
@@ -841,27 +1021,27 @@
 
 .dashboard-wrapper .content-area .inner-content-area .announcement-wrapper .single-anouncement .announcement-title {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: #025e30;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .announcement-wrapper .single-anouncement .announcement-timestamp {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #7A7A7A;
   margin-bottom: 1rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .announcement-wrapper .single-anouncement .announcement-body {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #242424;
   margin-bottom: 1rem;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .announcement-wrapper .single-anouncement .announcement-source {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #7A7A7A;
 }
 
@@ -914,7 +1094,7 @@
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div h2 {
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   color: #242424;
   margin-bottom: 1rem;
 }
@@ -925,7 +1105,7 @@
   border-radius: 1rem;
   padding: 0.5rem 2rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;
@@ -938,9 +1118,29 @@
   background-color: #01381d;
 }
 
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .ticket-form #error-msg {
+  font-weight: 400;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: red;
+  display: none;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .ticket-form #success-msg {
+  font-weight: 400;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: green;
+  display: none;
+  -webkit-transition: 0.5s;
+  transition: 0.5s;
+}
+
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .ticket-form .form-group label {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   display: block;
 }
 
@@ -951,7 +1151,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: none;
 }
 
@@ -964,7 +1164,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: none;
 }
 
@@ -979,21 +1179,21 @@
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .active-tickets .single-active-ticket h3 {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #025e30;
   font-weight: bold;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .active-tickets .single-active-ticket p {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #242424;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .tickets-area .tickets-div .active-tickets .single-active-ticket span {
   text-decoration: none;
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #01381d;
   cursor: pointer;
 }
@@ -1004,6 +1204,7 @@
   width: 45%;
   padding: 2rem;
   height: 100vh;
+  display: none;
 }
 
 @media (max-width: 480px) {
@@ -1096,14 +1297,19 @@
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chats-container .chat-box .single-chat p {
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #ffffff;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chats-container .chat-box .single-chat span {
   font-weight: 300;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   color: #ffffff;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chats-container .chat-box .single-chat a {
+  text-decoration: none;
+  color: white;
 }
 
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form {
@@ -1129,7 +1335,7 @@
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 1.25rem;
   border: none;
 }
 
@@ -1143,8 +1349,30 @@
   border-radius: 0.5rem;
 }
 
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form form input[type='file'] {
+  display: none;
+}
+
 .dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form form input[type='submit']:hover {
   background-color: #01381d;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form form i {
+  font-size: 1.5rem;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form #attach-name {
+  font-weight: 300;
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form .success-file {
+  color: #025e30;
+}
+
+.dashboard-wrapper .content-area .inner-content-area .support-wrapper .chats-area .chat-form .fail-file {
+  color: red;
 }
 
 @media (max-width: 480px) {

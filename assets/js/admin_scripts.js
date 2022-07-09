@@ -65,7 +65,7 @@ jQuery(document).ready( function($){
         })
     }
 
-    const condition2 = string.includes(buy_order) || string.includes(sell_order);
+    const condition2 = string.includes(buy_order) // || string.includes(sell_order);
 
     if (condition2){
 
@@ -178,8 +178,120 @@ jQuery(document).ready( function($){
 
     }
 
+    const condition5 = string.includes(sell_order);
+
+    if (condition5){
+
+        let all_assets_rates = {};
+        let current_rate = 0;
+        let hidden_field = document.getElementById("hidden-rate");
+
+        $.fn.retrieve_data_ajax = function(recipient){
+
+            $.ajax({
+                url: script_data.ajaxurl, // The wordpress Ajax URL echoed on line 4
+                data: {
+                    // The action is the WP function that'll handle this ajax request
+                    'action' : recipient
+                  },
+                  success:function( data ) {
+                    
+                    if (data['data'].length > 0){
+
+                        // console.log(data['data']);
+
+                        let outputhtml = "";
+
+                        data['data'].forEach(element => {
+                            outputhtml += "<option rate=" + element['buying_price']+ " value=" + element['id'] +">"+ element['name'] + " | " + element['short_name'] + "</option>";
+
+                            all_assets_rates[element['id']] = element['buying_price']
+
+                        });
+
+                    
+
+                        $("#select-asset").html(outputhtml);
+
+                        current_rate = all_assets_rates[select_field.value];
+
+                        hidden_field.value = current_rate;
+
+                        
+                    }
+                    
+                  },
+                  error: function( errorThrown ){
+                      window.alert( errorThrown );
+                  }
+              });
+            
+              
+        }
+
+        $.fn.update_select_input = function(result){ 
+
+            if (result.length === 0){
+                console.log(result);
+            }
+             
+        }
+
+
+
+        $(".asset-btn-1").click(function(){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_e_assets');
+            
+          });
+
+        $(".asset-btn-2").click(function(){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_crypto_assets');
+            
+        });
+        
+        
+        // Fee and quantity auto calculate
+        let quantity_field = document.getElementById("quantity");
+
+        // let fee_field = document.getElementById("fee");
+
+        let select_field = document.getElementById("select-asset");
+
+        let rate_output = document.getElementById("rate-output");
+
+        let fee_hidden = document.getElementById("hidden-fee");
+
+        let fee_output = document.getElementById("fee");
+        
+
+        select_field.addEventListener('change', function(){
+
+            current_rate = all_assets_rates[select_field.value];
+            hidden_field.value = current_rate;
+            
+            
+        })
+
+        quantity_field.addEventListener(
+            'input', function(){
+
+                fee_hidden.value = current_rate * quantity_field.value;
+
+                fee_output.innerHTML = fee_hidden.value
+
+                rate_output.innerHTML = current_rate;
+            }
+        )
+
+
+        // console.log(hidden_field.value);
+        // console.log(fee_field);
+        // console.log(select_field);
+        
+
+    }
     
-    const condition3 = string.includes(update_buy_order) || string.includes(update_sell_order);
+    const condition3 = string.includes(update_buy_order) //|| string.includes(update_sell_order);
 
     if (condition3){
 
@@ -212,6 +324,125 @@ jQuery(document).ready( function($){
                             outputhtml += "<option rate=" + element['selling_price']+ " value=" + element['id'] + selects +">"+ element['name'] + " | " + element['short_name'] + "</option>";
 
                             all_assets_rates[element['id']] = element['selling_price']
+
+                        });
+
+                    
+
+                        $("#select-asset").html(outputhtml);
+
+                        current_rate = all_assets_rates[select_field.value];
+
+                        hidden_field.value = current_rate;
+
+                        
+                    }
+                    
+                  },
+                  error: function( errorThrown ){
+                      window.alert( errorThrown );
+                  }
+              });
+            
+              
+        }
+
+        if (asset_type.value == 1){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_e_assets');
+        } else if (asset_type.value == 2){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_crypto_assets');
+        }
+
+
+
+        $(".asset-btn-1").click(function(){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_e_assets');
+            
+          });
+
+        $(".asset-btn-2").click(function(){
+            $.fn.retrieve_data_ajax('hid_ex_m_get_crypto_assets');
+            
+        });
+        
+        
+        // Fee and quantity auto calculate
+        let quantity_field = document.getElementById("quantity");
+
+        // let fee_field = document.getElementById("fee");
+
+        let select_field = document.getElementById("select-asset");
+
+        let rate_output = document.getElementById("rate-output");
+
+        let fee_hidden = document.getElementById("hidden-fee");
+
+        let fee_output = document.getElementById("fee");
+
+        let fee_temp = fee_hidden.value / quantity_field.value;
+
+        rate_output.innerHTML = fee_temp.toFixed(2);
+        
+        select_field.addEventListener('change', function(){
+
+            current_rate = all_assets_rates[select_field.value];
+            hidden_field.value = current_rate;
+            
+            
+        })
+
+        quantity_field.addEventListener(
+            'input', function(){
+
+                let price = current_rate * quantity_field.value;
+
+                fee_hidden.value = price.toFixed(2)
+
+                fee_output.innerHTML = fee_hidden.value
+
+                rate_output.innerHTML = current_rate;
+            }
+        )
+
+        // console.log(asset_type.value);
+        // console.log(asset_id.value);
+        
+
+    }
+
+    const condition6 = string.includes(update_sell_order);
+
+    if (condition6){
+
+        let all_assets_rates = {};
+        let current_rate = 0;
+        let hidden_field = document.getElementById("hidden-rate");
+        let asset_type = document.getElementById("asset-type");
+        let asset_id = document.getElementById("asset-id");
+
+
+        $.fn.retrieve_data_ajax = function(recipient){
+
+            $.ajax({
+                url: script_data.ajaxurl, // The wordpress Ajax URL echoed on line 4
+                data: {
+                    // The action is the WP function that'll handle this ajax request
+                    'action' : recipient
+                  },
+                  success:function( data ) {
+                    
+                    if (data['data'].length > 0){
+
+                        // console.log(data['data']);
+
+                        let outputhtml = "";
+
+                        data['data'].forEach(element => {
+                            let selects = element['id'] == asset_id.value ? " selected" : "";
+
+                            outputhtml += "<option rate=" + element['buying_price']+ " value=" + element['id'] + selects +">"+ element['name'] + " | " + element['short_name'] + "</option>";
+
+                            all_assets_rates[element['id']] = element['buying_price']
 
                         });
 
@@ -449,7 +680,7 @@ jQuery(document).ready( function($){
                             build_string += '<div class="single-chat-message ' + sender_class + '">';
 
                             if (msg['message'] != ""){
-                                build_string += '<p class="message-body">' + msg['message'] + '</p>';
+                                build_string += '<p class="message-body">' + msg['message'].replace('\\','') + '</p>';
                             }
 
                             if (msg['attachment'] != 0){

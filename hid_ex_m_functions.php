@@ -237,49 +237,68 @@ add_action( 'template_include', function( $template ) {
     return $template;
 } );
 
-function wp_insert_attachment_from_url( $url, $parent_post_id = null ) {
+add_action('after_setup_theme', 'hid_ex_m_remove_admin_bar');
 
-	if ( ! class_exists( 'WP_Http' ) ) {
-		require_once ABSPATH . WPINC . '/class-http.php';
-	}
+function hid_ex_m_remove_admin_bar() {
 
-	$http     = new WP_Http();
-	$response = $http->request( $url );
-	if ( 200 !== $response['response']['code'] ) {
-		return false;
-	}
-
-	$upload = wp_upload_bits( basename( $url ), null, $response['body'] );
-	if ( ! empty( $upload['error'] ) ) {
-		return false;
-	}
-
-	$file_path        = $upload['file'];
-	$file_name        = basename( $file_path );
-	$file_type        = wp_check_filetype( $file_name, null );
-	$attachment_title = sanitize_file_name( pathinfo( $file_name, PATHINFO_FILENAME ) );
-	$wp_upload_dir    = wp_upload_dir();
-
-	$post_info = array(
-		'guid'           => $wp_upload_dir['url'] . '/' . $file_name,
-		'post_mime_type' => $file_type['type'],
-		'post_title'     => $attachment_title,
-		'post_content'   => '',
-		'post_status'    => 'inherit',
-	);
-
-	// Create the attachment.
-	$attach_id = wp_insert_attachment( $post_info, $file_path, $parent_post_id );
-
-	// Include image.php.
-	require_once ABSPATH . 'wp-admin/includes/image.php';
-
-	// Generate the attachment metadata.
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $file_path );
-
-	// Assign metadata to attachment.
-	wp_update_attachment_metadata( $attach_id, $attach_data );
-
-	return $attach_id;
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
 
 }
+
+function hid_ex_m_filter_footer(){
+
+    ?>
+        <div class="hid_ex_m_currency-calculator" id="hid_ex_m_currency-calculator">
+
+            <div class="inner-div">
+                <i class="fa-solid fa-xmark" id="close-rate-calculator"></i>
+                <form action="" method="post">
+                    <h1>Rate Calculator</h1>
+                    <div class="modal-content">
+                        <div class="input-div">
+                            <h2>Asset Type</h2>
+                            <div class="asset-radio-buttons">
+                            <label id="checker-1">
+                                <input id="asset-btn-1" class="asset-btn-1" name="asset-type" type="radio" value="1"> eCurrency
+                            </label>
+                            <option selling='' buying='' value=1></option>
+                            
+                            <label>
+                                <input id="asset-btn-2" class="asset-btn-2" name="asset-type" type="radio" value="2"> Crypto Currency
+                            </label>
+
+                        </div>
+
+                        <select name="asset-select" id="asset-selection">
+                            <option value="0">Select An Asset</option>
+                        </select>
+
+                        <h2>Asset Quantity</h2>
+                        <input type="text" name="" id="item-quantity" value=0>
+                            
+                        </div>
+                        <div class="output-div">
+                        <p>Buying Price</p>
+                        <h2>#<span id="output-buying">-</span></h2>
+                        <p>Selling Price</p>
+                        <h2>#<span id="output-selling">-</span></h2>
+                        <p>Buying Per Quantity</p>
+                        <h2>#<span id="output-buying-q">-</span></h2>
+                        <p>Selling Per Quantity</p>
+                        <h2>#<span id="output-selling-q">-</span></h2>
+
+                        </div>
+                    </div>
+                    
+                </form>
+            </div>
+
+        </div>
+    <?php
+
+}
+
+add_filter('wp_footer', 'hid_ex_m_filter_footer');
+

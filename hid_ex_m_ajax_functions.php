@@ -10,14 +10,10 @@ function hid_ex_m_get_e_assets() {
 
     if ( isset($_REQUEST) ) {
 
-        // write_log("Got Here");
-
-        // $output = hid_ex_m_get_all_e_currency_assets();
-
-        // return $output;
-
         try {
+
             wp_send_json_success(hid_ex_m_get_all_e_currency_assets());
+
         } catch (\Throwable $th) {
             write_log($th);
         }
@@ -62,6 +58,85 @@ add_action( 'wp_ajax_hid_ex_m_get_crypto_assets', 'hid_ex_m_get_crypto_assets' )
 add_action( 'wp_ajax_nopriv_hid_ex_m_get_crypto_assets', 'hid_ex_m_get_crypto_assets' );
 
 
+// The function that handles ajax request from the frontend
+function hid_ex_m_get_e_assets_with_local_bank() {
+
+    // _REQUEST is the PHP superglobal bringing in all the data sent via ajax
+
+    if ( isset($_REQUEST) ) {
+
+        try {
+
+            $result = hid_ex_m_get_all_e_currency_assets();
+
+            if ($result != 0){
+
+                foreach ($result as $asset){
+
+                    $asset->bank = hid_ex_m_get_bank_data( $asset->associated_local_bank );
+                    
+                }
+            }
+
+            wp_send_json_success($result);
+            
+            
+        } catch (\Throwable $th) {
+            write_log($th);
+        }
+
+        // wp_send_json_success( $data = $output );
+    }
+
+    // Killing the Ajax function
+    die();
+}
+
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_get_e_assets_with_local_bank', 'hid_ex_m_get_e_assets_with_local_bank' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_get_e_assets_with_local_bank', 'hid_ex_m_get_e_assets_with_local_bank' );
+
+function hid_ex_m_get_crypto_assets_with_local_bank() {
+
+    // _REQUEST is the PHP superglobal bringing in all the data sent via ajax
+    
+    if ( isset($_REQUEST) ) {
+
+        //write_log("Got Here Now");
+
+        try {
+
+            $result = hid_ex_m_get_all_crypto_currency_assets();
+            
+            if ($result != 0){
+
+                foreach ($result as $asset){
+
+                    $asset->bank = hid_ex_m_get_bank_data( $asset->associated_local_bank );
+                    
+                }
+            }
+
+            wp_send_json_success($result);
+            
+        } catch (\Throwable $th) {
+            write_log($th);
+        }
+
+        //return hid_ex_m_get_all_crypto_currency_assets_with_local_bank();
+    }
+
+    // Killing the Ajax function
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_get_crypto_assets_with_local_bank', 'hid_ex_m_get_crypto_assets_with_local_bank' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_get_crypto_assets_with_local_bank', 'hid_ex_m_get_crypto_assets_with_local_bank' );
+
+
+
+
 function hid_ex_m_add_new_chat() {
 
     // _REQUEST is the PHP superglobal bringing in all the data sent via ajax
@@ -90,7 +165,7 @@ function hid_ex_m_add_new_chat() {
 add_action( 'wp_ajax_hid_ex_m_add_new_chat', 'hid_ex_m_add_new_chat' );
 
 
-function hid_ex_m_get_recent_chats_view() {
+function hid_ex_m_get_recent_chats_view(){
 
     // _REQUEST is the PHP superglobal bringing in all the data sent via ajax
     
@@ -127,8 +202,8 @@ function hid_ex_m_get_recent_chats_view() {
     die();
 }
   
-// Hooking the ajax function into wordpress
 add_action( 'wp_ajax_hid_ex_m_get_recent_chats_view', 'hid_ex_m_get_recent_chats_view' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_get_recent_chats_view', 'hid_ex_m_get_recent_chats_view' );
 
 
 function hid_ex_m_check_if_user_exists() {
@@ -298,34 +373,167 @@ function hid_ex_m_submit_sell_order() {
 
         write_log($_REQUEST);
 
-        // check_ajax_referer('file_upload', 'security');
+        check_ajax_referer('file_upload', 'security');
 
-        $attachment_id = 0;
+        $output = 0;
 
-        $arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
-
-        if (in_array($_FILES['file']['type'], $arr_img_ext)) {
-            $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
-            //$upload['url'] will gives you uploaded file path
-
-            $attachment_id = wp_insert_attachment_from_url($upload['url']);
-        }
-
-        $data = array(
-            'customer_id' => get_current_user_id(),
-            'asset_type'    => $_REQUEST['asset_type'],
-            'asset_id'      => $_REQUEST['asset_id'],
-            'quantity_sold' => $_REQUEST['quantity_sold'],
-            'amount_to_recieve' => $_REQUEST['amount_to_recieve'],
-            'proof_of_payment' => $attachment_id,
-            'order_status'      => 1
-        );
-
-        write_log($data);
+        $data = 0;
 
         try {
 
-            // hid_ex_m_create_new_sell_order( $data );
+            $arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+
+            if (in_array($_FILES['file']['type'], $arr_img_ext)) {
+
+                $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
+
+                $type = '';
+                if (!empty($upload['type'])) {
+
+                    $type = $upload['type'];
+
+                } else {
+                    $mime = wp_check_filetype($upload['file']);
+                if ($mime) {
+                    $type = $mime['type'];
+                    }
+                }
+
+                $attachment = array('post_title' => basename($upload['file']), 'post_content' => '', 'post_type' => 'attachment', 'post_mime_type' => $type, 'guid' => $upload['url']);
+
+                $data = wp_insert_attachment($attachment, $upload['file']);
+                
+                wp_update_attachment_metadata($data, wp_generate_attachment_metadata($data, $upload['file']));
+            }            
+            
+            
+            $input_data = array(
+
+                'customer_id' => get_current_user_id(),
+                'asset_type'    => $_REQUEST['chosen_asset_type'],
+                'asset_id'      => $_REQUEST['chosen_asset_id'],
+                'quantity_sold' => $_REQUEST['entered_quantity'],
+                'amount_to_recieve' => $_REQUEST['amount_to_recieve'],
+                'proof_of_payment'  => $data,
+                'sending_instructions' => $_REQUEST['sending'],
+                'order_status'  => 1
+                
+            );
+
+            hid_ex_m_create_new_sell_order( $input_data );
+
+            write_log($input_data);
+
+            $output = 1;
+            
+        } catch (\Throwable $th) {
+            $output = 0;
+            write_log($th);
+        }
+
+        wp_send_json_success($output);
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_submit_sell_order', 'hid_ex_m_submit_sell_order' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_submit_sell_order', 'hid_ex_m_submit_sell_order' );
+
+function hid_ex_m_submit_buy_order() {
+
+    if ( isset($_REQUEST) ) {
+
+        write_log($_REQUEST);
+
+        check_ajax_referer('file_upload', 'security');
+
+        $output = 0;
+
+        $data = 0;
+
+        try {
+
+            $arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+
+            if (in_array($_FILES['file']['type'], $arr_img_ext)) {
+
+                $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
+
+                $type = '';
+                if (!empty($upload['type'])) {
+
+                    $type = $upload['type'];
+
+                } else {
+                    $mime = wp_check_filetype($upload['file']);
+                if ($mime) {
+                    $type = $mime['type'];
+                    }
+                }
+
+                $attachment = array('post_title' => basename($upload['file']), 'post_content' => '', 'post_type' => 'attachment', 'post_mime_type' => $type, 'guid' => $upload['url']);
+
+                $data = wp_insert_attachment($attachment, $upload['file']);
+                
+                wp_update_attachment_metadata($data, wp_generate_attachment_metadata($data, $upload['file']));
+            }            
+            
+            
+            $input_data = array(
+
+                'customer_id' => get_current_user_id(),
+                'asset_type'    => $_REQUEST['chosen_asset_type'],
+                'asset_id'      => $_REQUEST['chosen_asset_id'],
+                'quantity' => $_REQUEST['entered_quantity'],
+                'fee' => $_REQUEST['amount_to_recieve'],
+                'proof_of_payment'  => $data,
+                'sending_instructions' => $_REQUEST['sending'],
+                'order_status'  => 1
+                
+            );
+
+            hid_ex_m_create_new_buy_order( $input_data );
+
+            write_log($input_data);
+
+            $output = 1;
+            
+        } catch (\Throwable $th) {
+            $output = 0;
+            write_log($th);
+        }
+
+        wp_send_json_success($output);
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_submit_buy_order', 'hid_ex_m_submit_buy_order' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_submit_buy_order', 'hid_ex_m_submit_buy_order' );
+
+
+function hid_ex_m_customer_open_new_support_ticket() {
+
+    if ( isset($_REQUEST) ) {
+
+        $input = array(
+            'title' => $_REQUEST['ticket-title'],
+            'details'    => $_REQUEST['ticket-details'],
+            'customer'      => $_REQUEST['customer'],
+            'ticket_status' => 1,
+            'requester' => $_REQUEST['customer-name']
+        );
+
+        $data = 0;
+
+        try {
+
+            hid_ex_m_create_new_support_ticket( $input );
+
             $data = 1;
 
         } catch (\Throwable $th) {
@@ -339,5 +547,107 @@ function hid_ex_m_submit_sell_order() {
 }
   
 // Hooking the ajax function into wordpress
-add_action( 'wp_ajax_hid_ex_m_submit_sell_order', 'hid_ex_m_submit_sell_order' );
-add_action( 'wp_ajax_nopriv_hid_ex_m_submit_sell_order', 'hid_ex_m_submit_sell_order' );
+add_action( 'wp_ajax_hid_ex_m_customer_open_new_support_ticket', 'hid_ex_m_customer_open_new_support_ticket' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_customer_open_new_support_ticket', 'hid_ex_m_customer_open_new_support_ticket' );
+
+function hid_ex_m_retrieve_ticket_chats() {
+
+    if ( isset($_REQUEST) ) {
+
+        $data = 0;
+
+        $all_chats = array();
+
+        try {
+
+            $all_chats = hid_ex_m_get_all_support_chat( $_REQUEST['ticket-id'] );
+
+            if ($all_chats != 0){
+
+                foreach ($all_chats as $message){
+
+                    if ($message->attachment){
+
+                        $message->attachment_url = wp_get_attachment_url($message->attachment);
+
+                    }
+                    
+                }
+            }
+            
+            $data = 1;
+
+        } catch (\Throwable $th) {
+            $data = 0;
+        }
+
+        wp_send_json_success( $all_chats);
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_retrieve_ticket_chats', 'hid_ex_m_retrieve_ticket_chats' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_retrieve_ticket_chats', 'hid_ex_m_retrieve_ticket_chats' );
+
+
+function hid_ex_m_create_a_new_chat() {
+
+    if ( isset($_REQUEST) ) {
+
+        check_ajax_referer('file_upload', 'security');
+
+        $data = 0;
+
+        try {
+
+            check_ajax_referer('file_upload', 'security');
+
+            $arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+
+            if (in_array($_FILES['file']['type'], $arr_img_ext)) {
+
+                $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
+
+                write_log($upload);
+
+                $type = '';
+                if (!empty($upload['type'])) {
+
+                    $type = $upload['type'];
+
+                } else {
+                    $mime = wp_check_filetype($upload['file']);
+                if ($mime) {
+                    $type = $mime['type'];
+                    }
+                }
+
+                $attachment = array('post_title' => basename($upload['file']), 'post_content' => '', 'post_type' => 'attachment', 'post_mime_type' => $type, 'guid' => $upload['url']);
+
+                $data = wp_insert_attachment($attachment, $upload['file']);
+                
+                wp_update_attachment_metadata($data, wp_generate_attachment_metadata($data, $upload['file']));
+            }            
+            
+            hid_ex_m_create_new_support_chat( array(
+                'sender' => $_REQUEST['sender'],
+                'message' => $_REQUEST['new-chat-text'],
+                'attachment' => $data,
+                'ticket' => $_REQUEST['ticket']
+            ) );
+            
+        } catch (\Throwable $th) {
+            $data = -1;
+        }
+
+        wp_send_json_success( $data );
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_create_a_new_chat', 'hid_ex_m_create_a_new_chat' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_create_a_new_chat', 'hid_ex_m_create_a_new_chat' );

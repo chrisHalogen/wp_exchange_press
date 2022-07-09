@@ -299,7 +299,7 @@ function hid_ex_m_exchange_client_area_header($page_data){
                                     if ($page_data['name'] == 'logout'){
                                         echo 'class="active-link"';
                                     }
-                                ?>>
+                                ?> id="logout-btn">
                                     <i class="fa-solid fa-power-off"></i>
                                     </i><span>Logout</span>
                                 </a>
@@ -321,7 +321,7 @@ function hid_ex_m_exchange_client_area_footer(){
 
     ?>
                 </div>
-
+                <?php wp_footer() ?>
             </body>
         </html>
 

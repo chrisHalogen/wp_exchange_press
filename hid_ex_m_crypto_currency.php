@@ -68,8 +68,6 @@ function hid_ex_m_crypto_assets_management(){
 
                                 $delete_url = admin_url("admin.php?page=crypto-currency-management&delete=$asset->id");
 
-                                
-
                                 echo "<tr><td>$asset->name</td>";
                                 echo "<td>$asset->short_name</td>";
 

@@ -329,7 +329,7 @@ function hid_ex_m_create_new_e_currency(){
 
     ?>
         <div class="create-new-assets-page wrap">
-            <h1>Create New eCurrency Aset</h1>
+            <h1>Create New eCurrency Asset</h1>
 
             <form action="" method="post">
                 <table class="form-table">

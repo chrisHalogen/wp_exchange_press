@@ -117,7 +117,8 @@ function hid_ex_m_tickets_chat_area( $ticket_id ){
                             <?php 
                             
                                 if ($single_chat->message){
-                                    echo "<p class='message-body'>" . $single_chat->message . "</p>";
+                                    
+                                    echo "<p class='message-body'>" . str_replace('\\','',$single_chat->message) . "</p>";
                                 } 
                             
                                 if ($single_chat->attachment){
@@ -125,7 +126,6 @@ function hid_ex_m_tickets_chat_area( $ticket_id ){
                                 } 
                             
                             ?>
-
                             <span class="message-details">Sent by <span class="message-sender"><?php echo $sender ?></span> | <span class="time-sent"><?php echo $single_chat->time_stamp ?></span></span>
                         </div>
                         
