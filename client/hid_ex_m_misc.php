@@ -1,5 +1,8 @@
 <?php
 
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
+
 function hid_ex_m_exchange_header($page_title){
 
     ?>
@@ -234,6 +237,17 @@ function hid_ex_m_exchange_client_area_header($page_data){
                                     </i><span>Today Rates</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('/customer-area/wallet/') ?>" <?php 
+                                    if ($page_data['name'] == 'wallet'){
+                                        echo 'class="active-link"';
+                                    }
+                                ?>>
+                                    <i class="fa-solid fa-wallet"></i>
+                                    </i><span>My Wallet</span>
+                                </a>
+                            </li>
+                            
                             <li>
                                 <a href="<?php echo site_url('/customer-area/sell-to-us/') ?>" <?php 
                                     if ($page_data['name'] == 'sell-to-us'){

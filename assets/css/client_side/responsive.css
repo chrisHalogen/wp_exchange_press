@@ -111,7 +111,7 @@
             justify-content: center;
   }
   .dashboard-wrapper .content-area .inner-content-area .account-summary .summary-card {
-    width: 150px;
+    width: inherit;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
   }
@@ -347,7 +347,7 @@
             align-items: center;
   }
   .dashboard-wrapper .content-area .inner-content-area .account-summary .summary-card {
-    width: 150px;
+    width: auto;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
   }

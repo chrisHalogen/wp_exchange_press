@@ -86,31 +86,6 @@ function hid_ex_m_create_crypto_currency_assets_table() {
     add_option( 'jal_db_version', $jal_db_version );
 }
 
-// Create the Activity Logs Tables
-function hid_ex_m_create_activity_logs_table() {
-    global $wpdb;
-    global $jal_db_version;
-
-    $table_name = $wpdb->prefix . 'hid_ex_m_activity_logs';
-
-    $charset_collate = $wpdb->get_charset_collate();
-
-    $sql = "CREATE TABLE $table_name (
-		id int NOT NULL AUTO_INCREMENT,
-		user_id int NOT NULL,
-        user_role tinytext NOT NULL,
-		action_type tinytext NOT NULL,
-        action_description tinytext NOT NULL,
-        time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-		PRIMARY KEY (id)
-	) $charset_collate;";
-
-    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-    dbDelta( $sql );
-
-    add_option( 'jal_db_version', $jal_db_version );
-}
-
 // Create the Support Tickets Tables
 function hid_ex_m_create_supports_ticket_table() {
     global $wpdb;
@@ -138,7 +113,7 @@ function hid_ex_m_create_supports_ticket_table() {
     add_option( 'jal_db_version', $jal_db_version );
 }
 
-// Create the Support Chat Tables
+// Create the Support Tickets Tables
 function hid_ex_m_create_supports_chat_table() {
     global $wpdb;
     global $jal_db_version;
@@ -149,11 +124,11 @@ function hid_ex_m_create_supports_chat_table() {
 
     $sql = "CREATE TABLE $table_name (
 		id int NOT NULL AUTO_INCREMENT,
-		sender tinytext NOT NULL DEFAULT 'Admin',
-        time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        message text NOT NULL DEFAULT '',
-        attachment int NOT NULL DEFAULT 0,
-        ticket int,
+        sender tinytext NOT NULL,
+        time_stamp DATETIME NOT NULL DEFAULT, CURRENT_TIMESTAMP,
+        message text NOT NULL,
+		attachment int NOT NULL DEFAULT 0,
+        ticket int NOT NULL,
 		PRIMARY KEY (id)
 	) $charset_collate;";
 
@@ -221,6 +196,36 @@ function hid_ex_m_create_sell_orders_table() {
     add_option( 'jal_db_version', $jal_db_version );
 }
 
+// Create the Wallet Transactions Tables
+function hid_ex_m_create_wallet_transactions_table() {
+    global $wpdb;
+    global $jal_db_version;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+		id int NOT NULL AUTO_INCREMENT,
+		customer_id int NOT NULL,
+        transaction_type int NOT NULL,
+        time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        amount decimal(10,2) NOT NULL,
+        account_balance decimal(10,2) NOT NULL,
+        mode tinyint NOT NULL,
+        details text NOT NULL,
+        proof_of_payment int NOT NULL,
+        sending_instructions text NOT NULL,
+        transaction_status tinyint DEFAULT '1',
+		PRIMARY KEY (id)
+	) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
+    add_option( 'jal_db_version', $jal_db_version );
+}
+
 // Create the Announcements Tables
 function hid_ex_m_create_announcements_table() {
     global $wpdb;
@@ -250,12 +255,12 @@ function hid_ex_m_run_on_activation(){
     hid_ex_m_create_local_banks_table();
     hid_ex_m_create_e_currency_assets_table();
     hid_ex_m_create_crypto_currency_assets_table();
-    hid_ex_m_create_activity_logs_table();
     hid_ex_m_create_supports_ticket_table();
     hid_ex_m_create_supports_chat_table();
     hid_ex_m_create_buy_orders_table();
     hid_ex_m_create_sell_orders_table();
     hid_ex_m_create_announcements_table();
+    hid_ex_m_create_wallet_transactions_table();
 
 }
 
@@ -268,12 +273,12 @@ function hid_ex_m_run_on_deactivation(){
         'hid_ex_m_local_bank',
         'hid_ex_m_e_currency_assets',
         'hid_ex_m_crypto_currency_assets',
-        'hid_ex_m_activity_logs',
         'hid_ex_m_supports_ticket',
         'hid_ex_m_supports_chat',
         'hid_ex_m_buy_orders',
         'hid_ex_m_sell_orders',
-        'hid_ex_m_announcements'
+        'hid_ex_m_announcements',
+        'hid_ex_m_wallet_transactions'
     ];
 
     foreach ($table_extensions as $extension) {
@@ -283,6 +288,14 @@ function hid_ex_m_run_on_deactivation(){
         $wpdb->query("DROP TABLE IF EXISTS " . $table_name);
 
     }
+
+    if (get_option('wallet_local_bank')){
+
+        delete_option('wallet_local_bank');
+
+    }
+
+    hid_ex_m_bulk_delete_users();
 
 }
 
@@ -483,6 +496,43 @@ function hid_ex_m_get_all_customers(){
     return $customers;
 }
 
+function comparator($object1, $object2) {
+
+    return (int)($object1->account_balance < $object2->account_balance);
+
+}
+
+// Customers
+function hid_ex_m_get_ranking_top_10_customers(){
+
+    $args = array (
+        'role' => 'customer',
+        'orderby' => 'account_balance',
+        'order' => 'DESC',
+        'fields' => 'all'
+    );
+
+    // Create the WP_User_Query object
+    $wp_user_query = new WP_User_Query($args);
+
+    // Get the results
+    $customers = $wp_user_query->get_results();
+
+    foreach ($customers as $customer) {
+
+        $customer->account_balance = hid_ex_m_get_account_balance($customer->ID);
+
+    }
+
+    usort($customers, 'comparator');
+
+    if (count($customers) > 10){
+        return array_slice($customers, 0, 10);
+    }
+
+    return $customers;
+}
+
 /* Create Customer User Instance */
 
 function hid_ex_m_create_new_customer( $first_name, $last_name, $email, $phone, $password, $username ){
@@ -499,12 +549,42 @@ function hid_ex_m_create_new_customer( $first_name, $last_name, $email, $phone, 
 
     $user_id = wp_insert_user( $userdata );
     add_user_meta( $user_id, 'phone_number', $phone);
+    add_user_meta( $user_id, 'account_balance', 0);
+    add_user_meta( $user_id, 'can_withdraw', 1);
 
 }
 
 function hid_ex_m_delete_customer($customer_id){
 
+    delete_user_meta( $customer_id, 'phone_number' );
+    delete_user_meta( $customer_id, 'account_balance' );
+    delete_user_meta( $customer_id, 'can_withdraw' );
     wp_delete_user($customer_id);
+}
+
+// Bulk Delete Customer
+function hid_ex_m_bulk_delete_users(){
+
+    //Include the user file with the user administration API
+    require_once( ABSPATH . 'wp-admin/includes/user.php' );
+
+    $role = 'customer';
+
+    //Get a list of users that belongs to the specified role
+    $users = get_users( array( 'role' => array( $role ) ) );
+
+    //Delete all the user of the specified role
+    foreach ( $users as $user ) {
+
+        $customer_id = $user->ID;
+
+        delete_user_meta( $customer_id, 'phone_number' );
+        delete_user_meta( $customer_id, 'account_balance' );
+        delete_user_meta( $customer_id, 'can_withdraw' );
+        wp_delete_user( $customer_id );
+    }
+    
+    
 }
 
 function hid_ex_m_get_customer_data($customer_id){
@@ -1078,4 +1158,319 @@ function hid_ex_m_get_customer_support_tickets($customer_id){
     $result = $wpdb->get_results("SELECT * FROM $table_name WHERE customer='$customer_id' AND ticket_status='1' ORDER BY last_activity DESC");
 
     return $result;
+}
+
+// Wallet Page Data
+function hid_ex_m_wallet_page_data($customer_id){
+
+    $total_transactions = 0;
+    $pending_payments = 0;
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $all_transactions = $wpdb->get_results("SELECT * FROM $table_name WHERE customer_id='$customer_id' ORDER BY time_stamp DESC");
+
+    if (! empty($all_transactions)){
+        $total_transactions = count($all_transactions);
+
+        foreach($all_transactions as $transaction){
+
+            if ($transaction->transaction_status == 1){
+                
+                $pending_payments += $transaction->amount;
+            }
+        }
+    }
+
+    $result = array(
+        'account_balance'   => hid_ex_m_get_account_balance($customer_id),
+        'can_withdraw'   => hid_ex_m_get_withdrawal_status($customer_id),
+        'total_transactions'    => $total_transactions,
+        'pending_payments'  => $pending_payments,
+        'all_transactions'  => $all_transactions
+
+    );
+
+    return $result;
+}
+
+function hid_ex_m_get_all_transactions(){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name");
+
+    return $result;
+
+}
+
+function hid_ex_m_get_all_transactions_30_days(){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    // CreatedDate >= DATEADD(day,-7, GETDATE())
+
+    // DATEDIFF(Month,time_stamp,GetDate())<=1 AND transaction_status=2
+
+    // Y-M-D h:m:s - gives actual day amd month
+
+    // SELECT * FROM `wp_hid_ex_m_wallet_transactions` WHERE transaction_status=2 AND time_stamp >= 22-06-22
+
+    $current_now = current_time("y-m-d");
+    $current_month = date( 'y-m-d', strtotime( '-30 days', current_time('timestamp') ) );
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE time_stamp >= $current_month AND transaction_status=2");
+
+    return $result;
+
+}
+
+// Get account balance
+function hid_ex_m_get_account_balance($customer_id){
+
+    if (! metadata_exists( 'user', $customer_id, 'account_balance' ) ) {
+
+        add_user_meta( $customer_id, 'account_balance', 0);
+    }
+
+    if (! metadata_exists( 'user', $customer_id, 'can_withdraw' ) ) {
+
+        add_user_meta( $customer_id, 'can_withdraw', 1);
+    }
+
+    return get_user_meta($customer_id, 'account_balance')[0];
+
+}
+
+
+
+// Get account balance
+function hid_ex_m_get_withdrawal_status($customer_id){
+
+    if (! metadata_exists( 'user', $customer_id, 'account_balance' ) ) {
+
+        add_user_meta( $customer_id, 'account_balance', 0);
+    }
+
+    if (! metadata_exists( 'user', $customer_id, 'can_withdraw' ) ) {
+
+        add_user_meta( $customer_id, 'can_withdraw', 1);
+    }
+
+    return get_user_meta($customer_id, 'can_withdraw')[0];
+
+}
+
+function hid_ex_m_create_new_wallet_transaction( $data ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $wpdb->insert(
+        $table_name,
+        $data
+    );
+
+
+}
+
+function hid_ex_m_update_wallet_bank( $bank_id ){
+
+    if (! update_option( 'wallet_local_bank', $bank_id) ){
+        add_option( 'wallet_local_bank', $bank_id );
+    }
+
+}
+
+function hid_ex_m_get_admin_wallet_page_data(){
+
+    // global $wpdb;
+
+    $total_customers = 0;
+    $total_pending = 0;
+    $total_declined = 0;
+    $percentage_completed = 0;
+    $total_completed = 0;
+    $total_in_wallet = 0;
+    $total_approved_credit = 0;
+    $total_approved_debit = 0;
+    $credit_30_days = 0;
+    $debit_30_days = 0;
+
+    $all_customers = hid_ex_m_get_all_customers();
+
+    if (!empty($all_customers)){
+        $total_customers = count($all_customers);
+
+        foreach ($all_customers as $customer) {
+            
+            $total_in_wallet += hid_ex_m_get_account_balance($customer->ID);
+
+        }
+    }
+
+    $all_transactions = hid_ex_m_get_all_transactions();
+
+    if (!empty($all_transactions)){
+
+        foreach($all_transactions as $transaction){
+
+            if ($transaction->transaction_status == 0){
+
+                $total_declined += 1;
+
+            } else if ($transaction->transaction_status == 1){
+
+                $total_pending += 1;
+
+            } else if ($transaction->transaction_status == 2){
+
+                $total_completed += 1;
+
+                if ($transaction->transaction_type == 1){
+
+                    $total_approved_credit += $transaction->amount;
+
+                } else if ($transaction->transaction_type == 2){
+
+                    $total_approved_debit += $transaction->amount;
+
+                }
+
+            }
+
+        }
+
+        $percentage_completed = ( $total_completed / count($all_transactions) ) * 100 ;
+    }
+
+    $approved_transactions_30_days = hid_ex_m_get_all_transactions_30_days();
+
+    if (!empty($approved_transactions_30_days)){
+
+        foreach ($approved_transactions_30_days as $transaction) {
+            
+            if ($transaction->transaction_type == 1){
+
+                $credit_30_days += $transaction->amount;
+
+            } else if ($transaction->transaction_type == 2){
+
+                $debit_30_days += $transaction->amount;
+
+            }
+
+        }
+
+    }
+
+    $output = array(
+        'total_customers'       => $total_customers,
+        'total_pending'         => $total_pending,
+        'total_declined'        => $total_declined,
+        'percentage_completed'  => round($percentage_completed, 2),
+        'total_in_wallet'       => round($total_in_wallet, 2),
+        'total_approved_credit' => round($total_approved_credit,2),
+        'total_approved_debit'  => round($total_approved_debit,2),
+        'credit_30_days'        => round($credit_30_days, 2),
+        'debit_30_days'         => round($debit_30_days, 2),
+        'top_10_customers'      => hid_ex_m_get_ranking_top_10_customers(),
+    );
+
+    return $output;
+
+}
+
+function hid_ex_m_get_customer_approved_transactions($id,$type){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $output = 0;
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE customer_id = $id AND transaction_status=$type AND transaction_type = 1");
+
+    if (!empty($result)){
+        
+        foreach ($result as $transaction) {
+            $output += $transaction->amount;
+        }
+    }
+
+    return $output;
+
+}
+
+function hid_ex_m_get_all_withdrawals(){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE transaction_type = 2 ORDER BY time_stamp DESC");
+
+    return $result;
+
+}
+
+function hid_ex_m_get_all_deposits(){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE transaction_type = 1 ORDER BY time_stamp DESC");
+
+    return $result;
+
+}
+
+function hid_ex_m_update_transaction_status( $status, $id ){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $data = array(
+        'transaction_status' => (int)$status
+    );
+
+    $where = array(
+        'id'        => (int)$id
+    );
+
+    $wpdb->update(
+        $table_name,
+        $data,
+        $where
+    );
+
+    hid_ex_m_update_last_activity( $where['id'] );
+
+}
+
+function hid_ex_m_get_wallet_transaction_data( $id ){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$id'");
+
+    return $result[0];
+}
+
+function hid_ex_m_update_wp_option( $option_key, $option_value ){
+
+    if (! update_option( $option_key, $option_value) ){
+        add_option( $option_key, $option_value );
+    }
+
 }

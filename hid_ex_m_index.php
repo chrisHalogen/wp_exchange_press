@@ -42,4 +42,4 @@ require_once (HID_EX_M_ROOTDIR.'hid_ex_m_announcements.php');
 require_once (HID_EX_M_ROOTDIR.'hid_ex_m_ajax_functions.php');
 require_once (HID_EX_M_ROOTDIR.'hid_ex_m_support.php');
 require_once (HID_EX_M_ROOTDIR.'client/hid_ex_m_misc.php');
-// require_once (HID_EX_M_ROOTDIR.'client/hid_ex_m_client_area.php');
+require_once (HID_EX_M_ROOTDIR.'hid_ex_m_wallet_transactions.php');

@@ -1,5 +1,8 @@
 <?php
 
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
+
     $page_name = get_query_var('authentication_page_name');
 
     if ( strtolower($page_name) == 'register' ){

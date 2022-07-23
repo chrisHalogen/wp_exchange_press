@@ -1,4 +1,8 @@
 $wordpress_primary_blue : #21759b;
+$primary_font : 4rem;
+$secondary_font : 2rem;
+$regular_font : 1.5rem;
+$tiny_text : 0.9rem;
 
 // Ecurrency Assets Page
 .ecurrency-assets-admin-page{
@@ -281,5 +285,125 @@ $wordpress_primary_blue : #21759b;
             }
         }
 
+    }
+}
+
+.wallets-management{
+
+    .head-info-area{
+        width: 97%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        margin: 1rem auto;
+
+        .info-card{
+            padding: 2rem;
+            background-color: #ffffff;
+            min-width: 175px;
+            max-width: auto;
+            height: auto;
+            margin: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0.25rem 0.25rem 0.5rem rgba($color: #000000, $alpha: 0.2);
+
+            .figure{
+                font-size: $primary_font;
+                font-weight: bold;
+                margin-bottom: 2.5rem;
+                display: block;
+            }
+
+            .figure-description{
+                font-size: $tiny_text;
+                font-weight: light;
+                display: block;
+            }
+        }
+    }
+
+    .cta-section{
+        width: 97%;
+        margin: 2rem auto;
+
+        .select-bank{
+            p{
+                text-align: center;
+                font-size: $regular_font;
+            }
+
+            form{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                #local-bank{
+                    margin-right: 2rem;
+                }
+                
+            }
+        }
+
+        .withdrawal-deposit-btn{
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+
+            a{
+                margin: 0 1.5rem;
+            }
+            
+        }
+        
+    }
+
+    .customers-info-section{
+        margin-top: 2rem;
+        width: 97%;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        margin: 1rem auto;
+
+        // .customers-section{
+        //     width: 47.5%;
+        //     height: 150px;
+        //     background-color: #ffffff;
+        // }
+
+        .customers-section{
+            margin-top: 2rem;
+            width: 42.5%;
+            min-height: 300px;
+            max-height: auto;
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0.25rem 0.25rem 0.5rem rgba($color: #000000, $alpha: 0.2);
+
+            .customers-info-title{
+                font-size: $secondary_font;
+                font-weight: 600;
+                padding-bottom: 2rem;
+            }
+
+            hr{
+                margin: 1rem 0;
+                border-width: 2px;
+            }
+
+            .user-balance{
+                border-bottom: 2px dashed #222222;
+
+                display: flex;
+                justify-content: space-between;
+                font-size: $tiny_text;
+                font-weight: 400;
+            }
+
+            
+        }
     }
 }

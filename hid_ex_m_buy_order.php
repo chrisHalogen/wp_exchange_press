@@ -1,5 +1,8 @@
 <?php
 
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
+
 
 function hid_ex_m_buy_order_master_view(){
 

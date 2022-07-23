@@ -651,3 +651,140 @@ function hid_ex_m_create_a_new_chat() {
 // Hooking the ajax function into wordpress
 add_action( 'wp_ajax_hid_ex_m_create_a_new_chat', 'hid_ex_m_create_a_new_chat' );
 add_action( 'wp_ajax_nopriv_hid_ex_m_create_a_new_chat', 'hid_ex_m_create_a_new_chat' );
+
+function hid_ex_m_get_wallet_funding_local_bank() {
+
+    if ( isset($_REQUEST) ) {
+
+        $data = 0;
+
+        $bank_id = get_option('wallet_local_bank');
+
+        $bank = hid_ex_m_get_bank_data( $bank_id );
+
+        $output = array(
+            'data'  => $data,
+            'bank'  => $bank
+        );
+
+        wp_send_json_success( $output );
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_get_wallet_funding_local_bank', 'hid_ex_m_get_wallet_funding_local_bank' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_get_wallet_funding_local_bank', 'hid_ex_m_get_wallet_funding_local_bank' );
+
+function hid_ex_m_credit_wallet() {
+
+    if ( isset($_REQUEST) ) {
+
+        check_ajax_referer('file_upload', 'security');
+
+        $data = 0;
+
+        try {
+
+            // check_ajax_referer('file_upload', 'security');
+
+            $arr_img_ext = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+
+            if (in_array($_FILES['file']['type'], $arr_img_ext)) {
+
+                $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
+
+                // write_log($upload);
+
+                $type = '';
+                if (!empty($upload['type'])) {
+
+                    $type = $upload['type'];
+
+                } else {
+                    $mime = wp_check_filetype($upload['file']);
+                if ($mime) {
+                    $type = $mime['type'];
+                    }
+                }
+
+                $attachment = array('post_title' => basename($upload['file']), 'post_content' => '', 'post_type' => 'attachment', 'post_mime_type' => $type, 'guid' => $upload['url']);
+
+                $image_id = wp_insert_attachment($attachment, $upload['file']);
+                
+                wp_update_attachment_metadata($data, wp_generate_attachment_metadata($data, $upload['file']));
+            }            
+            
+            $input_data = array(
+                'customer_id' => get_current_user_id(),
+                'transaction_type' => 1,
+                'amount' => $_REQUEST['amount'],
+                'mode'  => $_REQUEST['mode'],
+                'details'   => $_REQUEST['details'],
+                'proof_of_payment' => $image_id,
+                'sending_instructions'  => 'Not required',
+                'transaction_status'    => 1
+            );
+
+            write_log($input_data);
+
+            hid_ex_m_create_new_wallet_transaction( $input_data );
+
+            $data = 1;
+            
+        } catch (\Throwable $th) {
+            $data = -1;
+        }
+
+        wp_send_json_success( $data );
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_credit_wallet', 'hid_ex_m_credit_wallet' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_credit_wallet', 'hid_ex_m_credit_wallet' );
+
+
+function hid_ex_m_debit_wallet() {
+
+    if ( isset($_REQUEST) ) {
+
+        $data = 0;
+
+        // Check if user's account balance is sufficient
+
+        try {           
+            
+            $input_data = array(
+                'customer_id' => get_current_user_id(),
+                'transaction_type' => 2,
+                'amount' => $_REQUEST['amount_'],
+                'mode'  => $_REQUEST['mode_w'],
+                'details'   => $_REQUEST['details'],
+                'proof_of_payment' => 0,
+                'sending_instructions'  => $_REQUEST['info'],
+                'transaction_status'    => 1
+            );
+
+            write_log($input_data);
+
+            hid_ex_m_create_new_wallet_transaction( $input_data );
+
+            $data = 1;
+            
+        } catch (\Throwable $th) {
+            $data = -1;
+        }
+
+        wp_send_json_success( $data );
+    }
+  
+    die();
+}
+  
+// Hooking the ajax function into wordpress
+add_action( 'wp_ajax_hid_ex_m_debit_wallet', 'hid_ex_m_debit_wallet' );
+add_action( 'wp_ajax_nopriv_hid_ex_m_debit_wallet', 'hid_ex_m_debit_wallet' );

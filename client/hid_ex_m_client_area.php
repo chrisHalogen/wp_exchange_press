@@ -1,4 +1,8 @@
 <?php
+
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
+
     $page_name = get_query_var('customer_page_name');
 
     // Get user Details
@@ -110,7 +114,382 @@
 
         hid_ex_m_customer_area_rates( $page_data );
 
+    } elseif ( strtolower($page_name) == 'wallet' ) {
+        
+        $page_data = array(
+            'title'     => 'Wallet | Luxtrade',
+            'name'      => strtolower($page_name),
+            'current_user_id'   => $current_user->ID,
+            'current_user_display_name' => $current_user->display_name,
+            'db_data'       => hid_ex_m_wallet_page_data($current_user->ID)
+        );
+
+        hid_ex_m_customer_area_wallet( $page_data );
+
     }
+
+function hid_ex_m_customer_area_wallet( $page_data ){
+
+    hid_ex_m_exchange_client_area_header($page_data);
+
+    ?>
+        
+        <div class="content-area" id="hid_ex_m_wallet">
+
+            <div class="inner-content-area">
+                <h1 class="tab-title">My Wallet</h1>
+
+                <div class="account-summary">
+                    <div class="summary-card">
+                        <i class="fa-solid fa-money-check-dollar"></i>
+                        <span><?php echo $page_data['db_data']['account_balance'] ?></span>
+                        <p>Total Wallet Balance</p>
+                    </div>
+                    <div class="summary-card">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span><?php echo $page_data['db_data']['total_transactions'] ?></span>
+                        <p>Total Wallet Transactions</p>
+                    </div>
+                    <div class="summary-card">
+                        <i class="fa-solid fa-wallet"></i>
+                        <span><?php echo $page_data['db_data']['pending_payments'] ?></span>
+                        <p>Pending Wallet Payments</p>
+                    </div>
+                    
+                </div>
+
+                <div class="wallet-details-container">
+
+                    <div class="ctas">
+                        <button id="fund-wallet-btn">Fund my Wallet</button>
+                        <!-- <button>Request Withdrawal</button> -->
+                        <?php
+                        
+                            if ($page_data['db_data']['can_withdraw'] == 0){
+                                
+                                echo '<span>You cannot withdraw at the moment</span>';
+
+                            } elseif (($page_data['db_data']['can_withdraw'] == 1)){
+                                
+                                echo "<button id='withdrawal-wallet-btn'>Request Withdrawal</button>";
+
+                            }
+                        
+                        ?>
+                    </div>
+
+                    <div class="wallet-request-form" id="wallet-request-modal">
+
+                        <div class="inner-div-fund">
+                            <i class="fa-solid fa-xmark" id="close-wallet-request"></i>
+
+                            <form action="" id="wallet-form" class="wallet-transaction-form">
+                                <h2>Fund Your Wallet</h2>
+                                <hr class="section-divider">
+                                <div class="form-group">
+                                    
+                                    <p class="label-paragraph">Funding Mode</p>
+                                    <div class="mode-radio-buttons">
+                                        <label>
+                                            <input class="mode-btn-0" name="mode" type="radio" value="0"> Local Bank Transfer
+                                        </label>
+
+                                        <label>
+                                            <input class="mode-btn-1" name="mode" type="radio" id="mode-btn-1" value="1"> eCurrency
+                                        </label>
+
+                                        <label>
+                                            <input class="mode-btn-2" id="mode-btn-2" name="mode" type="radio" value="2"> Crypto Currency
+                                        </label>
+                                        <p class="description">How do you want to fund your account?</p>
+            
+                                    </div>
+                                </div>
+                                <div style="align-items: center;" class="form-group">
+                                    
+                                    <p class="label-paragraph">Select Asset</p>
+            
+                                    <div id="select-input-wrapper">
+                                        <select name="selected-asset" id="selected-asset" class="selected-asset">
+                                            <option value="0">Select Asset</option>
+                                            
+                                        </select>
+                                        <p class="description">Select the asset to buy</p>
+                                    </div>
+            
+                                </div>
+            
+                                <h2>Amount</h2>
+                                <hr class="section-divider">
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Amount</p>
+            
+                                    <div id="amount_wrapper">
+                                        <input type="text" name="amount" id="amount">
+                                        <p class="description">How much do you wish to credit your wallet?</p>
+                                    </div>
+            
+                                </div>
+
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Quantity</p>
+            
+                                    <div id="quantity_wrapper">
+                                        <input type="text" name="quantity" id="quantity">
+                                        <p class="description">What quantity do you want to send in?</p>
+                                    </div>
+                                    
+            
+                                </div>
+            
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Amount</p>
+            
+                                    <div id="fee_wrapper">
+                                        <p class="label-paragraph"><span id="amount-output"></span> </p>
+                                        <p class="description">Exchange Rate - <span id="rate_output">0</span><br>This amount will be added to your wallet balance</p>
+                                    </div>
+                                </div>
+            
+                                <h2>Payment</h2>
+                                <hr class="section-divider">
+                                <div class="form-group" >
+                                    <p class="label-paragraph">Sending Instructions</p>
+            
+                                    <div>
+                                        <textarea placeholder="e.g Wallet Address, eMail Address..." name="" id="sending-instructions" cols="80" rows="5" disabled>-</textarea>
+                                        <p class="description">Follow these instructions to send in your asset.</p>
+                                    </div>
+            
+                                </div>
+            
+                                <div class="form-group" >
+                                    <p class="label-paragraph">Proof of payment</p>
+            
+                                    <div>
+                                        <div class="proof-upload">
+                                            <button id="image_upload_btn">Upload Image</button>
+                                            <input type="file" name="screenshot" class="custom-file-input" id="custom-file-input" accept="image/png, image/jpg, image/jpeg"/>
+                                            <span id="image_name">-</span>
+                                        </div>
+                                        <p class="description">Upload a screenshot of proof of payment</p>
+                                    </div>
+            
+                                </div>
+
+                                <span id="message" class="message-output">-</span>
+            
+                                <input type="submit" name="submit" value="Submit">
+                                
+            
+                            </form>
+
+                            <form action="" id="wallet-form-withdrawal" class="wallet-transaction-form">
+                                <input type="hidden" name="balance" id="account_balance" value="<?php echo $page_data['db_data']['account_balance'] ?>">
+                                <h2>Request for Withdrawal</h2>
+                                <hr class="section-divider">
+                                <div class="form-group">
+                                    
+                                    <p class="label-paragraph">Withdrawal Mode</p>
+                                    <div class="mode-radio-buttons">
+                                        <label>
+                                            <input class="mode-btn-0" name="mode_w" type="radio" value="0"> Local Bank Transfer
+                                        </label>
+
+                                        <label>
+                                            <input class="mode-btn-1" name="mode_w" type="radio" id="mode-btn-1_w" value="1"> eCurrency
+                                        </label>
+
+                                        <label>
+                                            <input class="mode-btn-2" id="mode-btn-2_w" name="mode_w" type="radio" value="2"> Crypto Currency
+                                        </label>
+                                        <p class="description">How do you want to process your Withdrawal?</p>
+            
+                                    </div>
+                                </div>
+                                <div style="align-items: center;" class="form-group">
+                                    
+                                    <p class="label-paragraph">Select Asset</p>
+            
+                                    <div id="select-input-wrapper_w">
+                                        <select name="selected-asset" id="selected-asset_w" class="selected-asset">
+                                            <option value="0">Select Asset</option>
+                                            
+                                        </select>
+                                        <p class="description">Select the asset to withdraw</p>
+                                    </div>
+            
+                                </div>
+            
+                                <h2>Amount</h2>
+                                <hr class="section-divider">
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Amount</p>
+            
+                                    <div id="amount_wrapper_w">
+                                        <input type="text" name="amount" id="amount_w">
+                                        <p class="description">How much do you wish to withdraw from your wallet?</p>
+                                    </div>
+            
+                                </div>
+
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Quantity</p>
+            
+                                    <div id="quantity_wrapper_w">
+                                        <input type="text" name="quantity" id="quantity_w">
+                                        <p class="description">What quantity do you want to withdraw?</p>
+                                    </div>
+            
+                                </div>
+            
+                                <div class="form-group" style="align-items: center;">
+                                    <p class="label-paragraph">Amount</p>
+            
+                                    <div id="fee_wrapper_w">
+                                        <p class="label-paragraph"><span id="amount-output_w"></span> </p>
+                                        <p class="description">Exchange Rate - <span id="rate_output_w">0</span><br>This amount will be withdrawn from your wallet balance</p>
+                                    </div>
+                                </div>
+            
+                                <h2>Payment</h2>
+                                <hr class="section-divider">
+                                <div class="form-group" >
+                                    <p class="label-paragraph">Sending Instructions</p>
+            
+                                    <div>
+                                        <textarea placeholder="e.g Wallet Address, Local bank account, eMail Address..." name="" id="sending-instructions_w" cols="80" rows="5"></textarea>
+                                        <p class="description">How should we credit you?</p>
+                                    </div>
+            
+                                </div>
+
+                                <span id="message-w" class="message-output">-</span>
+            
+                                <input type="submit" name="submit" value="Submit">
+                                
+            
+                            </form>
+                        
+                        </div>
+                        
+                    </div>
+
+                </div>
+
+                <h2 style="text-align:center">Previous Wallet Transactions</h2>
+                <div class="wallet-wrapper">
+                    
+                    <div class="table-container">
+
+                        <?php
+                        
+                            if (empty($page_data['db_data']['pending_payments'])){
+                                
+                                echo "<center><p>You haven't made any transactions</p></center>";
+
+                            } else {
+
+                                ?>
+                                
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td style="width: 10%;">Type</td>
+                                            <td style="width: 10%;">Amount</td>
+                                            <td style="width: 10%;">Balance</td>
+                                            <td style="width: 10%;">Mode</td>
+                                            <td style="width: 10%;">Time</td>
+                                            <td style="width: 40%;">Details</td>
+                                            <td style="width: 10%;">Status</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <?php
+
+                                            $build_string = "";
+
+                                            $account_balance = $page_data['db_data']['account_balance'];
+                                        
+                                            foreach($page_data['db_data']['all_transactions'] as $transaction){
+
+                                                $type = "";
+                                                $amount = $transaction->amount;
+                                                $mode = "";
+                                                $time = $transaction->time_stamp;
+                                                $details = $transaction->details;
+                                                $status = 0;
+                                                
+                                                if ($transaction->transaction_type == 1){
+                                                    $type = "Credit"; 
+                                                } else {
+                                                    $type = "Withdrawal";
+                                                }
+
+                                                if ($transaction->mode == 0){
+                                                    $mode = "Local Bank";
+                                                } elseif ($transaction->mode == 1){
+                                                    $mode = "eCurr.";
+                                                } elseif ($transaction->mode == 2){
+                                                    $mode = "Crypto";
+                                                }
+
+                                                if ($transaction->transaction_status == 0){
+                                                    $status = "Declined";
+                                                } elseif ($transaction->transaction_status == 1){
+                                                    $status = "Pending";
+                                                } elseif ($transaction->transaction_status == 2){
+                                                    $status = "Completed";
+                                                }
+
+                                                $build_string .= "<tr><td>$type</td>";
+
+                                                $build_string .= "<td>$amount</td>";
+
+                                                $build_string .= "<td>$account_balance</td>";
+
+                                                $build_string .= "<td>$mode</td>";
+
+                                                $build_string .= "<td>$time</td>";
+
+                                                $build_string .= "<td>$details</td>";
+
+                                                $build_string .= "<td>$status</td></tr>";
+
+                                                if ($transaction->transaction_type == 1 && $transaction->transaction_status == 2){
+                                                    $account_balance -= $transaction->amount; 
+                                                } else if ($transaction->transaction_type == 2 && $transaction->transaction_status == 2) {
+                                                    $account_balance += $transaction->amount;
+                                                }
+                                                
+                                            }
+
+                                            echo $build_string;
+                                        
+                                        ?>
+                                        
+                                    </tbody>
+                                </table>
+                                
+                                <?php
+
+                            }
+                        
+                        ?>
+
+                    </div>
+                </div>
+
+                
+            </div>
+            <!-- End of Wallet content area -->
+        </div> 
+
+    <?php
+
+    hid_ex_m_exchange_client_area_footer();
+}
 
 function hid_ex_m_customer_area_buy_from_us( $page_data ){
 
@@ -325,8 +704,8 @@ function hid_ex_m_customer_area_rates( $page_data ){
                             ?>
                             
                             <div class="rates-top">
-                                <h2 class="section-title main-head-title">eCurrency Rates</h2>
-                                <button class="open-calculator">eCurrency Rates Calculator</button>
+                                <h2 class="section-title main-head-title">Crypto Currency Rates</h2>
+                                <button class="open-calculator">Crypto Rates Calculator</button>
                             </div> 
                             
                             <div class="table-container">
@@ -361,36 +740,6 @@ function hid_ex_m_customer_area_rates( $page_data ){
                                         
                                         ?>
 
-                                        <!-- <tr>
-                                            <td><img src="./assets/media/btc.png" alt="..."></td>
-                                            <td>Bitcoin | BTC</td>
-                                            <td>$19,500</td>
-                                            <td>$20,220</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="./assets/media/btc.png" alt="..."></td>
-                                            <td>Bitcoin | BTC</td>
-                                            <td>$19,500</td>
-                                            <td>$20,220</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="./assets/media/btc.png" alt="..."></td>
-                                            <td>Bitcoin | BTC</td>
-                                            <td>$19,500</td>
-                                            <td>$20,220</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="./assets/media/btc.png" alt="..."></td>
-                                            <td>Bitcoin | BTC</td>
-                                            <td>$19,500</td>
-                                            <td>$20,220</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img src="./assets/media/btc.png" alt="..."></td>
-                                            <td>Bitcoin | BTC</td>
-                                            <td>$19,500</td>
-                                            <td>$20,220</td>
-                                        </tr> -->
                                         
                                     </tbody>
                                 </table>
@@ -460,11 +809,12 @@ function hid_ex_m_customer_dashboard( $page_data ){
                 <h2 class="section-title">Quick Links</h2>
 
                 <div class="quick-links">
+                    <a href="<?php echo site_url('/customer-area/wallet/') ?>">My Wallet</a>
                     <a href="<?php echo site_url('/customer-area/buy-from-us/') ?>">Buy Crypto</a>
                     <a href="<?php echo site_url('/customer-area/sell-to-us/') ?>">Sell Crypto</a>
                     <a href="<?php echo site_url('/customer-area/rates/') ?>">Check Rates</a>
                     <a href="<?php echo site_url('/customer-area/announcements/') ?>">Announcements</a>
-                    <a href="<?php echo site_url('/privacy-policy/') ?>">Terms of Use</a>
+                    <a href="<?php echo esc_attr( esc_url( get_privacy_policy_url() ) ); ?>">Terms of Use</a>
                     
                 </div>
 

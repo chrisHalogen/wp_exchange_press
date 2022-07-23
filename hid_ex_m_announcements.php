@@ -1,5 +1,8 @@
 <?php
 
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
+
 
 function hid_ex_m_announcement_master_view(){
 
@@ -105,13 +108,18 @@ function hid_ex_m_announcement_create_view(){
 
     if ( isset($_POST['new-submit']) ) {
 
-
         $data = array(
             'headline'    => $_POST['headline'],
             'body'        => $_POST['body']
         );
 
-        hid_ex_m_create_new_announcement( $data );    
+        hid_ex_m_create_new_announcement( $data );
+        
+        $result = wp_mail(
+            'christackoms@gmail.com',
+            'LuxTrade Alert - New Announcement Published',
+            "This is to notify you that a new alert was just published on your platform.\nDo well to check it out"
+        );
 
         echo "<script>location.replace('admin.php?page=announcements');</script>";
 
@@ -178,7 +186,7 @@ function hid_ex_m_announcement_update_view(){
             'id' => $_POST['id']
         );
 
-        hid_ex_m_update_announcement_data( $data, $where );    
+        hid_ex_m_update_announcement_data( $data, $where );   
 
         echo "<script>location.replace('admin.php?page=announcements');</script>";
 

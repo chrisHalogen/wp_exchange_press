@@ -262,4 +262,137 @@
 .support-admin-page .support-items-wrapper .chats-area .chat-form form .submit button {
   width: 100%;
 }
+
+.wallets-management .head-info-area {
+  width: 97%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin: 1rem auto;
+}
+
+.wallets-management .head-info-area .info-card {
+  padding: 2rem;
+  background-color: #ffffff;
+  min-width: 175px;
+  max-width: auto;
+  height: auto;
+  margin: 0.5rem;
+  border-radius: 0.5rem;
+  -webkit-box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+          box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.wallets-management .head-info-area .info-card .figure {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 2.5rem;
+  display: block;
+}
+
+.wallets-management .head-info-area .info-card .figure-description {
+  font-size: 0.9rem;
+  font-weight: light;
+  display: block;
+}
+
+.wallets-management .cta-section {
+  width: 97%;
+  margin: 2rem auto;
+}
+
+.wallets-management .cta-section .select-bank p {
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.wallets-management .cta-section .select-bank form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.wallets-management .cta-section .select-bank form #local-bank {
+  margin-right: 2rem;
+}
+
+.wallets-management .cta-section .withdrawal-deposit-btn {
+  margin-top: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.wallets-management .cta-section .withdrawal-deposit-btn a {
+  margin: 0 1.5rem;
+}
+
+.wallets-management .customers-info-section {
+  margin-top: 2rem;
+  width: 97%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: flex-start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  margin: 1rem auto;
+}
+
+.wallets-management .customers-info-section .customers-section {
+  margin-top: 2rem;
+  width: 42.5%;
+  min-height: 300px;
+  max-height: auto;
+  background-color: #ffffff;
+  padding: 2rem;
+  border-radius: 1rem;
+  -webkit-box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+          box-shadow: 0.25rem 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.wallets-management .customers-info-section .customers-section .customers-info-title {
+  font-size: 2rem;
+  font-weight: 600;
+  padding-bottom: 2rem;
+}
+
+.wallets-management .customers-info-section .customers-section hr {
+  margin: 1rem 0;
+  border-width: 2px;
+}
+
+.wallets-management .customers-info-section .customers-section .user-balance {
+  border-bottom: 2px dashed #222222;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
 /*# sourceMappingURL=admin_style.css.map */

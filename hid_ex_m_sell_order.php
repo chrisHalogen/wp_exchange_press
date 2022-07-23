@@ -1,5 +1,7 @@
 <?php
 
+    // To deny anyone access to this file directly
+    if ( ! defined( 'ABSPATH' ) ) exit;
 
 function hid_ex_m_sell_order_master_view(){
 
@@ -98,7 +100,7 @@ function hid_ex_m_sell_order_archive(){
 
                         } else {
                             ?>
-                                <p>No assets to display</p>
+                                <p>No Orders to display</p>
                             <?php
                         }
                     ?>

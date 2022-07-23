@@ -66,7 +66,7 @@ $breakpoint-laptop-md: 950px;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "SF Pro", 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: "SF Pro";
 }
 
 // Authentication Pages CSS
@@ -440,6 +440,97 @@ $breakpoint-laptop-md: 950px;
 
 }
 
+// Rates Output
+.hid_ex_m_guests_rate_output{
+    width: 100%;
+
+    .currency-rates-wrapper{
+
+        margin-top: 3rem;
+
+        .rates-top{
+            padding: 0 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+
+            .section-title{
+                text-align: center;
+                margin-right: 2rem
+            }
+
+            button{
+                margin-left: 2rem;
+                background-color: $bg_main;
+                border-radius: 1rem;
+                padding: 0.5rem 2rem;
+                @include regular-text();
+                color: $bg_white;
+                text-decoration: none;
+                cursor: pointer;
+                transition: 0.5s;
+                border : none;
+            }
+
+            button:hover{
+                background-color: $accent;
+            }
+
+        }
+
+        
+        .table-container{
+            width: 75%;
+            margin: auto;
+            overflow-x: auto;
+
+            table{
+                border-collapse: collapse;
+                font-size: 1rem;
+
+                td{
+                    padding: 0.5rem 1rem;
+                    width: 300px;
+                }
+
+                thead{
+                    td{
+                        background-color: #54585d;
+                        color: #ffffff;
+                        font-weight: bold;
+                        @include regular-text();
+                        border: 1px solid #54585d;
+                        line-height: 100%;
+                    }
+                }
+
+                tbody{
+                    td{
+                        color: #636363;
+                        border: 1px solid #dddfe1;
+
+                        img{
+                            max-width: 3rem;
+                            max-height: 3rem;
+                        }
+                    }
+
+                    tr{
+                        background-color: #f9fafb;
+                    }
+
+                    tr:nth-child(odd) {
+                        background-color: #ffffff;
+                    }
+                }
+            }
+         
+
+        }
+    }
+}
+
 // Dashboard 
 .dashboard-wrapper{
     // margin-top: -2rem;
@@ -574,7 +665,7 @@ $breakpoint-laptop-md: 950px;
                 border-radius: 1rem;
                 padding: 2rem;
                 display: flex;
-                justify-content: space-between;
+                justify-content: center;
                 flex-wrap: wrap;
                 margin-bottom: 1.5rem;
 
@@ -583,8 +674,9 @@ $breakpoint-laptop-md: 950px;
                     border-radius: 1rem;
                     padding: 2rem;
                     box-shadow: 0.25rem 0.25rem 0.75rem rgba($color: #000000, $alpha: 0.25);
-                    width: 22.5%;
-                    max-width: 225px;
+                    min-width: 20%;
+                    max-width: auto;
+                    margin: 1rem;
                     
                     i{
                         color: $bg_main;
@@ -951,33 +1043,7 @@ $breakpoint-laptop-md: 950px;
                             border: 0.25rem dashed $bg_text;
                             border-radius: 0.5rem;
 
-                            // .custom-file-input::-webkit-file-upload-button {
-                            //     visibility: hidden;
-                            // }
-                            // .custom-file-input::before {
-                            //     content: 'Select some files';
-                            //     display: inline-block;
-                            //     background: linear-gradient(top, #f9f9f9, #e3e3e3);
-                            //     border: 1px solid #999;
-                            //     border-radius: 3px;
-                            //     padding: 5px 8px;
-                            //     outline: none;
-                            //     white-space: nowrap;
-                            //     -webkit-user-select: none;
-                            //     cursor: pointer;
-                            //     text-shadow: 1px 1px #fff;
-                            //     font-weight: 700;
-                            //     font-size: 10pt;
-                            // }
-                                
-                            // .custom-file-input:hover::before {
-                            //     border-color: black;
-                            // }
-                                
-                            // .custom-file-input:active::before {
-                            //     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
-                                
-                            // }
+                            
 
                             input[type='file'] {
                                 opacity:0    
@@ -1331,6 +1397,336 @@ $breakpoint-laptop-md: 950px;
                             color: red
                         }
 
+                    }
+                }
+            }
+
+            .wallet-wrapper{
+
+                margin-top: 0.5rem;
+
+                .rates-top{
+                    padding: 0 2rem;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    margin-bottom: 2rem;
+
+                    .section-title{
+                        text-align: center;
+                        margin-right: 2rem
+                    }
+
+                    button{
+                        margin-left: 2rem;
+                        background-color: $bg_main;
+                        border-radius: 1rem;
+                        padding: 0.5rem 2rem;
+                        @include regular-text();
+                        color: $bg_white;
+                        text-decoration: none;
+                        cursor: pointer;
+                        transition: 0.5s;
+                        border : none;
+                    }
+    
+                    button:hover{
+                        background-color: $accent;
+                    }
+
+                }
+
+                
+                .table-container{
+                    width: 75%;
+                    margin: auto;
+                    overflow-x: auto;
+
+                    @include laptop-md-view(){
+                        width: 85%;
+                    }
+
+                    @include laptop-view(){
+                        width: 95%;
+                    }
+
+                    table{
+                        border-collapse: collapse;
+                        font-size: 0.8rem;
+
+                        td{
+                            padding: 0.5rem 1rem;
+                            width: 300px;
+                        }
+
+                        thead{
+                            td{
+                                background-color: #54585d;
+                                color: #ffffff;
+                                font-weight: bold;
+                                @include regular-text();
+                                border: 1px solid #54585d;
+                            }
+                        }
+
+                        tbody{
+                            td{
+                                color: #636363;
+                                border: 1px solid #dddfe1;
+
+                                img{
+                                    max-width: 3rem;
+                                    max-height: 3rem;
+                                }
+                            }
+
+                            tr{
+                                background-color: #f9fafb;
+                            }
+
+                            tr:nth-child(odd) {
+                                background-color: #ffffff;
+                            }
+                        }
+                    }
+                 
+
+                }
+            }
+
+            .wallet-details-container{
+                margin-bottom: 1rem;
+                
+                .ctas{
+
+                    display: flex;
+                    justify-content: space-around;
+                    margin: 0 auto;
+                    padding: 1rem;
+
+                    button{
+                        margin-left: 2rem;
+                        background-color: $bg_main;
+                        border-radius: 1rem;
+                        padding: 0.5rem 2rem;
+                        @include regular-text();
+                        color: $bg_white;
+                        text-decoration: none;
+                        cursor: pointer;
+                        transition: 0.5s;
+                        border : none;
+                    }
+                }
+
+                #wallet-request-modal{
+                    position: fixed;
+                    width: 100%;
+                    height: 100vh;
+                    background-color: rgba($color: #000000, $alpha: 0.25);
+                    top: 0px;
+                    right: 0px;
+                    bottom: 0px;
+                    left: 0px;
+                    z-index: 2147483647;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: visibility 0s, opacity 0.5s linear;
+
+                    // visibility: visible;
+                    // opacity: 1;
+
+                    .inner-div-fund{
+                        width: 65%;
+                        height: 80%;
+                        background-color: white;
+                        border-radius: 0.5rem;
+                        padding: 1rem;
+                        position: relative;
+                        overflow-y: auto;
+
+                        @include laptop-view(){
+                            width: 75%;
+                        }
+                
+                        @include laptop-md-view(){
+                            width: 85%;
+                        }
+
+                        @include tablet-view(){
+                            width: 95%;
+                        }
+
+                        #close-wallet-request{
+                            font-size: 2rem;
+                            position: absolute;
+                            right: 1.5rem;
+                            top: 1rem;
+                            color: $bg_main;
+                            cursor: pointer;
+                        }
+
+                        .wallet-transaction-form{
+
+                            input[type='file'] {
+                                display: none;    
+                              }
+
+                            h2{
+                                @include secondary-text();
+                            }
+        
+                            .section-divider{
+                                width: 100%;
+                                background-color: $bg_main;
+                                text-align: center;
+                                height: 0.25rem;
+                                border: none;
+                                border-radius: 1rem;
+                            }
+        
+                            input[type='submit']{
+                                margin: 2rem 0;
+                                background-color: $bg_main;
+                                border-radius: 1rem;
+                                padding: 0.5rem 2rem;
+                                @include regular-text();
+                                color: $bg_white;
+                                text-decoration: none;
+                                cursor: pointer;
+                                transition: 0.5s;
+                                border : none;
+                            }
+            
+                            input[type='submit']:hover{
+                                background-color: $accent;
+                            }
+
+                            .message-output {
+                                display: none;
+                            }
+
+                            .success-msg{
+                                display: block;
+                                color: $bg_main;
+                            }
+
+                            .failure-msg{
+                                display: block;
+                                color: red;
+                            }
+        
+                            input[type='text']{
+                                width: 300px;
+                                outline: none;
+                                background-color: $aux_white;
+                                padding: 0.5rem 1rem;
+                                border-radius: 0.5rem;
+                                @include regular-text();
+                                border: none;
+                            }
+        
+                            textarea{
+                                width: 300px;
+                                resize: none;
+                                outline: none;
+                                background-color: $aux_white;;
+                                padding: 0.5rem 1rem;
+                                border-radius: 0.5rem;
+                                @include regular-text();
+                                border: none;
+                            }
+        
+                            .form-group{
+                                margin: 2rem 0;
+                                display: flex;
+
+                                @include laptop-md-view(){
+                                    flex-direction: column;
+                                    align-items: center
+                                }
+
+                                @include tablet-view(){
+                                    margin: 1rem 0,
+                                }
+        
+                                .description{
+                                    @include tiny-text();
+                                }
+        
+                                .selected-asset{
+                                    min-width: 250px;
+                                    background-color: $bg_white;
+                                    padding: 0.5rem 1rem;
+                                    border: 1px solid $accent;
+                                    border-radius: 0.5rem;
+                                    @include regular-text();
+                                    line-height: 100%;
+
+                                    @include laptop-md-view(){
+                                        flex-direction: column;
+                                        max-width: auto
+                                    }
+                                }
+        
+                                .label-paragraph{
+                                    @include regular-text();
+                                    color: $bg_secondary;
+                                    width: 300px;
+
+                                    @include laptop-md-view(){
+                                        font-weight: bold;
+                                        margin-bottom: 1rem;
+                                    }
+                                }
+        
+                                .mode-radio-buttons{
+                                    width: 300px;
+
+                                    label{
+                                        display: block;
+                                        margin: 0.25rem 0;
+                                    }
+        
+                                    input[type='radio']{
+                                        accent-color: $bg_main;
+                                        
+                                        
+                                    }
+                                }
+        
+                                .proof-upload{
+                                    width: 300px;
+                                    height: 125px;
+                                    display: flex;
+                                    justify-content: center;
+                                    align-items: center;
+                                    flex-direction: column;
+                                    background-color: $bg_white;
+                                    border: 0.25rem dashed $bg_text;
+                                    border-radius: 0.5rem;
+        
+                                    button{
+                                        margin: 0.25rem 0;
+                                        background-color: $bg_secondary;
+                                        border-radius: 1rem;
+                                        padding: 0.25rem 1rem;
+                                        @include regular-text();
+                                        color: $bg_white;
+                                        text-decoration: none;
+                                        cursor: pointer;
+                                        border : none;
+                                        transition: 0.5s;
+                                    }
+        
+                                    button:hover{
+                                        background-color: black;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

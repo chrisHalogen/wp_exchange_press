@@ -143,6 +143,14 @@ function addAdminPageContent() {
     );
 
     add_submenu_page('exchange-manager',//parent page slug
+        'Wallets',//page title
+        'Wallets',//menu title
+        'manage_options',//manage optios
+        'wallet-management',//slug
+        'hid_ex_m_wallet_master_view'//function
+    );
+
+    add_submenu_page('exchange-manager',//parent page slug
         'Buy Orders',//page title
         'Buy Orders',//menu title
         'manage_options',//manage optios
@@ -302,3 +310,236 @@ function hid_ex_m_filter_footer(){
 
 add_filter('wp_footer', 'hid_ex_m_filter_footer');
 
+
+function hid_ex_m_guests_rate_output(){
+
+    ?>
+        <div class="hid_ex_m_guests_rate_output">
+
+            <div class="currency-rates-wrapper">
+
+                <?php
+                        
+                    $e_assets = hid_ex_m_get_all_e_currency_assets();
+
+                    if (empty($e_assets)){
+                        echo "<center><p>No eCurrency Assets Available</p></center>";
+                    } else {
+                        
+                        ?>
+                        
+                        <div class="rates-top">
+                            <h2 class="section-title main-head-title">eCurrency Rates</h2>
+                            <button class="open-calculator">eCurrency Rates Calculator</button>
+                        </div> 
+                        
+                        <div class="table-container">
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td style="width: 10%; min-width: 70px">Icon</td>
+                                        <td style="width: 50%; min-width: 250px">Name | Allias</td>
+                                        <td style="width: 20%; min-width: 100px">Buying Price</td>
+                                        <td style="width: 20%; min-width: 100px">Selling Price</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php
+                                    
+                                        foreach ($e_assets as $asset){
+
+                                            ?>
+                                            
+                                            <tr>
+                                                <td><img src="<?php echo wp_get_attachment_url( $asset->icon ) ?>" alt="..."></td>
+                                                <td><?php echo $asset->name . ' | ' . $asset->short_name ?></td>
+                                                <td><?php echo $asset->buying_price ?></td>
+                                                <td><?php echo $asset->selling_price ?></td>
+                                            </tr>
+                                            
+                                            <?php
+
+                                        }
+                                    
+                                    ?>
+                                    
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        
+                        <?php
+
+                    }
+
+                ?>
+
+            </div>
+
+            <div class="currency-rates-wrapper">
+
+                <?php
+                        
+                    $crypto_assets = hid_ex_m_get_all_crypto_currency_assets();
+
+                    if (empty($crypto_assets)){
+                        echo "<center><p>No Crypto Currency Assets Available</p></center>";
+                    } else {
+                        
+                        ?>
+                        
+                        <div class="rates-top">
+                            <h2 class="section-title main-head-title">Crypto Rates</h2>
+                            <button class="open-calculator">Crypto Rates Calculator</button>
+                        </div> 
+                        
+                        <div class="table-container">
+                            
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td style="width: 10%; min-width: 70px">Icon</td>
+                                        <td style="width: 50%; min-width: 250px">Name | Allias</td>
+                                        <td style="width: 20%; min-width: 100px">Buying Price</td>
+                                        <td style="width: 20%; min-width: 100px">Selling Price</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <?php
+                                    
+                                        foreach ($crypto_assets as $asset){
+
+                                            ?>
+                                            
+                                            <tr>
+                                                <td><img src="<?php echo wp_get_attachment_url( $asset->icon ) ?>" alt="..."></td>
+                                                <td><?php echo $asset->name . ' | ' . $asset->short_name ?></td>
+                                                <td><?php echo $asset->buying_price ?></td>
+                                                <td><?php echo $asset->selling_price ?></td>
+                                            </tr>
+                                            
+                                            <?php
+
+                                        }
+                                    
+                                    ?>
+                                    
+                                </tbody>
+                            </table>
+                            
+                        </div>
+                        
+                        <?php
+
+                    }
+
+                ?>
+
+            </div>
+
+        </div>
+    <?php
+
+}
+
+add_shortcode('hid_ex_m_show_rates','hid_ex_m_guests_rate_output');
+
+
+function hid_ex_m_hook_css() {
+    ?>
+    
+    <style>
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Thin.ttf' ?>') format('truetype');
+            font-weight: 100;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Ultralight.ttf' ?>') format('truetype');
+            font-weight: 200;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Light.ttf' ?>') format('truetype');
+            font-weight: 300;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Regular.ttf' ?>') format('truetype');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Medium.ttf' ?>') format('truetype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Semibold.ttf' ?>') format('truetype');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Bold.ttf' ?>') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Heavy-1.ttf' ?>') format('truetype');
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: "SF Pro";
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Heavy-1.ttf' ?>');
+            src: url('<?php echo plugin_dir_url( __DIR__ ) . 'assets/font-dir/FontsFree-Net-SFProDisplay-Heavy-1.ttf' ?>') format('truetype');
+            font-weight: 900;
+            font-style: normal;
+        }
+
+    </style>
+    
+    <?php
+}
+// add_action('wp_head', 'hid_ex_m_hook_css');
+
+// // Mailer
+add_action( 'phpmailer_init', 'hid_ex_m_send_smtp_email' );
+
+function hid_ex_m_send_smtp_email( $phpmailer ) {
+
+    $phpmailer->isSMTP();
+
+    $phpmailer->Host       = get_option('smtp_host');
+    $phpmailer->SMTPAuth   = true;
+    $phpmailer->Port       = strval(get_option('smtp_port'));
+    $phpmailer->SMTPSecure = get_option('smtp_encryption');
+    $phpmailer->Username   = get_option('smtp_username');
+    $phpmailer->Password   = get_option('smtp_password');
+    $phpmailer->From       = get_option('business_email');
+    $phpmailer->FromName   = 'LuxTrade Admin';
+
+}
+
+add_action( 'wp_mail_failed', function ( $error ) {
+    write_log( $error->get_error_message() );
+} );
+
+// add_filter( 'wp_mail_smtp_core_wp_mail_function_incorrect_location_notice', '__return_false' );
