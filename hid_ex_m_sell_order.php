@@ -76,6 +76,8 @@ function hid_ex_m_sell_order_archive(){
 
                                 $asset_name = hid_ex_m_get_asset_name($order->asset_type,$order->asset_id);
 
+                                $qty = floatval($order->quantity_sold);
+
                                 echo "<tr><td>$customer_name</td>";
                                 echo "<td>$asset_type</td>";
 
@@ -85,7 +87,7 @@ function hid_ex_m_sell_order_archive(){
 
                                 echo "<td>$order->amount_to_recieve</td>";
 
-                                echo "<td>$order->quantity_sold</td>";
+                                echo "<td>$qty</td>";
 
                                 echo "<td>$order_status</td>";
 

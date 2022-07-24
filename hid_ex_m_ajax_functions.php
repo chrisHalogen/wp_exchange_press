@@ -371,8 +371,6 @@ function hid_ex_m_submit_sell_order() {
 
     if ( isset($_REQUEST) ) {
 
-        write_log($_REQUEST);
-
         check_ajax_referer('file_upload', 'security');
 
         $output = 0;
@@ -412,7 +410,7 @@ function hid_ex_m_submit_sell_order() {
                 'customer_id' => get_current_user_id(),
                 'asset_type'    => $_REQUEST['chosen_asset_type'],
                 'asset_id'      => $_REQUEST['chosen_asset_id'],
-                'quantity_sold' => $_REQUEST['entered_quantity'],
+                'quantity_sold' => (float)($_REQUEST['entered_quantity']),
                 'amount_to_recieve' => $_REQUEST['amount_to_recieve'],
                 'proof_of_payment'  => $data,
                 'sending_instructions' => $_REQUEST['sending'],
@@ -445,8 +443,6 @@ function hid_ex_m_submit_buy_order() {
 
     if ( isset($_REQUEST) ) {
 
-        write_log($_REQUEST);
-
         check_ajax_referer('file_upload', 'security');
 
         $output = 0;
@@ -486,7 +482,7 @@ function hid_ex_m_submit_buy_order() {
                 'customer_id' => get_current_user_id(),
                 'asset_type'    => $_REQUEST['chosen_asset_type'],
                 'asset_id'      => $_REQUEST['chosen_asset_id'],
-                'quantity' => $_REQUEST['entered_quantity'],
+                'quantity' => (float)($_REQUEST['entered_quantity']),
                 'fee' => $_REQUEST['amount_to_recieve'],
                 'proof_of_payment'  => $data,
                 'sending_instructions' => $_REQUEST['sending'],
@@ -756,27 +752,31 @@ function hid_ex_m_debit_wallet() {
 
         // Check if user's account balance is sufficient
 
-        try {           
-            
-            $input_data = array(
-                'customer_id' => get_current_user_id(),
-                'transaction_type' => 2,
-                'amount' => $_REQUEST['amount_'],
-                'mode'  => $_REQUEST['mode_w'],
-                'details'   => $_REQUEST['details'],
-                'proof_of_payment' => 0,
-                'sending_instructions'  => $_REQUEST['info'],
-                'transaction_status'    => 1
-            );
+        if (!(hid_ex_m_get_account_balance(get_current_user_id()) < $_REQUEST['amount_'] )){
 
-            write_log($input_data);
+            try {           
+                
+                $input_data = array(
+                    'customer_id' => get_current_user_id(),
+                    'transaction_type' => 2,
+                    'amount' => $_REQUEST['amount_'],
+                    'mode'  => $_REQUEST['mode_w'],
+                    'details'   => $_REQUEST['details'],
+                    'proof_of_payment' => 0,
+                    'sending_instructions'  => $_REQUEST['info'],
+                    'transaction_status'    => 1
+                );
 
-            hid_ex_m_create_new_wallet_transaction( $input_data );
+                write_log($input_data);
 
-            $data = 1;
-            
-        } catch (\Throwable $th) {
-            $data = -1;
+                hid_ex_m_create_new_wallet_transaction( $input_data );
+
+                $data = 1;
+                
+            } catch (\Throwable $th) {
+                $data = -1;
+            }
+
         }
 
         wp_send_json_success( $data );

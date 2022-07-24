@@ -534,7 +534,7 @@ function hid_ex_m_send_smtp_email( $phpmailer ) {
     $phpmailer->Username   = get_option('smtp_username');
     $phpmailer->Password   = get_option('smtp_password');
     $phpmailer->From       = get_option('business_email');
-    $phpmailer->FromName   = 'LuxTrade Admin';
+    $phpmailer->FromName   = 'Luxtrade - Admin';
 
 }
 

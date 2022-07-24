@@ -43,6 +43,14 @@ function hid_ex_m_exchange_manager_settings(){
 
         }
 
+        $message_body = "Greetings,\n\nYou're recieving this Notification because the general settings on the website just got updated.\n\nKindly log into the site WP Admin dashboard to review the changes published\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            get_option('business_email'),
+            'LuxTrade Alert !!! General Settings Updated',
+            $message_body
+        );
+
         echo '<span><strong>Updated Successfully</strong></span>';
 
         echo "<script>location.replace('admin.php?page=exchange-manager');</script>";

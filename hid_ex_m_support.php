@@ -198,10 +198,19 @@ function hid_ex_m_open_support_tickets(){
 
                         $ticket_description = str_replace(PHP_EOL, '', $single_ticket -> details);
 
+                        // if ($single_chat->message){
+                                    
+                        //     echo "<p class='message-body'>" . str_replace('\\','',$single_chat->message) . "</p>";
+                        // }
+
+                        $ticket_title = str_replace('\\','',$ticket_title);
+
                         if ( strlen($ticket_description) > 50 ) {
 
                             $ticket_description = substr($ticket_description,0,150) . " ...";
                         }
+
+                        $ticket_description = str_replace('\\','',$ticket_description);
 
                         $close_url = admin_url("admin.php?page=support&tab=close&id=$single_ticket->id");
 

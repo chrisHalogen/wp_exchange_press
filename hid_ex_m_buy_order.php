@@ -77,6 +77,8 @@ function hid_ex_m_buy_order_archive(){
 
                                 $asset_name = hid_ex_m_get_asset_name($order->asset_type,$order->asset_id);
 
+                                $qty = floatval($order->quantity);
+
                                 echo "<tr><td>$customer_name</td>";
                                 echo "<td>$asset_type</td>";
 
@@ -86,7 +88,7 @@ function hid_ex_m_buy_order_archive(){
 
                                 echo "<td>$order->fee</td>";
 
-                                echo "<td>$order->quantity</td>";
+                                echo "<td>$qty</td>";
 
                                 echo "<td>$order_status</td>";
 
@@ -456,8 +458,8 @@ function hid_ex_m_update_buy_order_view(){
                             <label for="sending-instruction">Sending Instruction</label>
                         </th>
                         <td>
-                            <textarea name="sending-instruction" class="regular-text" id="sending-instruction" cols="40" rows="5"><?php echo $order_data->sending_instructions ?></textarea>
-
+                            <textarea name="sending-instruction" class="regular-text" id="sending-instruction" cols="40" rows="5"><?php echo str_replace('\\','', $order_data->sending_instructions) ?></textarea>
+                            
                             <p class="description">How will your customer recieve the asset</p>
                         </td>
                     </tr>

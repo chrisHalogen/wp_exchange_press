@@ -153,8 +153,8 @@ function hid_ex_m_create_buy_orders_table() {
         asset_type tinyint NOT NULL,
         time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         asset_id tinyint NOT NULL,
-        quantity decimal(10,7) NOT NULL,
-        fee decimal(10,2) NOT NULL,
+        quantity decimal(20,7) NOT NULL,
+        fee decimal(20,2) NOT NULL,
         sending_instructions text DEFAULT '',
         order_status tinyint DEFAULT '1',
         proof_of_payment int NOT NULL,
@@ -182,8 +182,8 @@ function hid_ex_m_create_sell_orders_table() {
         asset_type tinyint NOT NULL,
         time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         asset_id tinyint NOT NULL,
-        quantity_sold decimal(10,7) NOT NULL,
-        amount_to_recieve decimal(10,2) NOT NULL,
+        quantity_sold decimal(20,7) NOT NULL,
+        amount_to_recieve decimal(20,2) NOT NULL,
         proof_of_payment int NOT NULL,
         sending_instructions text NOT NULL,
         order_status tinyint DEFAULT '1',
@@ -292,6 +292,36 @@ function hid_ex_m_run_on_deactivation(){
     if (get_option('wallet_local_bank')){
 
         delete_option('wallet_local_bank');
+
+    }
+    if (get_option('business_email')){
+
+        delete_option('business_email');
+
+    }
+    if (get_option('smtp_host')){
+
+        delete_option('smtp_host');
+
+    }
+    if (get_option('smtp_port')){
+
+        delete_option('smtp_port');
+
+    }
+    if (get_option('smtp_username')){
+
+        delete_option('smtp_username');
+
+    }
+    if (get_option('smtp_password')){
+
+        delete_option('smtp_password');
+
+    }
+    if (get_option('smtp_encryption')){
+
+        delete_option('smtp_encryption');
 
     }
 
@@ -552,6 +582,22 @@ function hid_ex_m_create_new_customer( $first_name, $last_name, $email, $phone, 
     add_user_meta( $user_id, 'account_balance', 0);
     add_user_meta( $user_id, 'can_withdraw', 1);
 
+    try {
+
+        $message_body = "Greetings $first_name,\n\nYou're recieving this eMail Notification because your registeration at Luxtrade was successful.\n\nBelow are some of your data provided upon registeration\nFirst Name : $first_name\nLast Name : $last_name\nEmail : $email\nPhone : $phone\nUsername : $username\nPassword : ----------------\n\nKindly return to Luxtrade to sign into your dashboard to start trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Customer Registeration Successful',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
 }
 
 function hid_ex_m_delete_customer($customer_id){
@@ -611,6 +657,22 @@ function hid_ex_m_update_customer_data( $first_name, $last_name, $email, $phone,
 
     update_user_meta( $id, 'phone_number', $phone );
 
+    try {
+        
+        $message_body = "Greetings $first_name,\n\nYou're recieving this eMail Notification because your profile at Luxtrade got updated successfully.\n\nBelow are some of your data provided\nFirst Name : $first_name\nLast Name : $last_name\nEmail : $email\nPhone : $phone\nUsername : $username\nPassword : ----------------\n\nKindly return to Luxtrade to sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Customer Registeration Successful',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
 }
 
 // Buy Order
@@ -623,6 +685,40 @@ function hid_ex_m_create_new_buy_order( $data ){
         $table_name,
         $data
     );
+
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $asset_type = hid_ex_m_get_asset_type($data["asset_type"]);
+        $asset_name = hid_ex_m_get_asset_name($data["asset_type"],$data["asset_id"]);
+        $qty = $data["quantity"];
+        $fee = $data["fee"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because your buy order was placed successfully and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity : $qty\nFee : $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Buy order created Successfully',
+            $message_body
+        );
+
+        $name = hid_ex_m_get_customer_data_name($data["customer_id"]);
+
+        $message_body = "Greetings,\n\nYou're recieving this eMail Notification because a customer by the name $name just created a new buy order and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity : $qty\nFee : # $fee\n\nKindly return to Luxtrade and sign into WP Admin to view and update the order.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            get_option('business_email'),
+            'LuxTrade Alert !!! You have a new Buy Order',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
 
 }
 
@@ -692,6 +788,30 @@ function hid_ex_m_update_buy_order_data( $data, $where ){
 
     $wpdb->update( $table_name, $data, $where );
 
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $asset_type = hid_ex_m_get_asset_type($data["asset_type"]);
+        $asset_name = hid_ex_m_get_asset_name($data["asset_type"],$data["asset_id"]);
+        $qty = $data["quantity"];
+        $fee = $data["fee"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because a buy order of yours got updated by Luxtrade admin.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity : $qty\nFee : # $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Buy order Updated by Admin',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
 }
 
 // Sell Order
@@ -704,6 +824,43 @@ function hid_ex_m_create_new_sell_order( $data ){
         $table_name,
         $data
     );
+
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $asset_type = hid_ex_m_get_asset_type($data["asset_type"]);
+        $asset_name = hid_ex_m_get_asset_name($data["asset_type"],$data["asset_id"]);
+        $qty = $data["quantity_sold"];
+        $fee = $data["amount_to_recieve"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because your sell order was placed successfully and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity Sold : $qty\nAmount to Recieve : # $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Sell order created Successfully',
+            $message_body
+        );
+
+        $name = hid_ex_m_get_customer_data_name($data["customer_id"]);
+
+        $message_body = "Greetings,\n\nYou're recieving this eMail Notification because a customer by the name $name just created a sell order and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity Sold : $qty\nAmount to Recieve : # $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            get_option('business_email'),
+            'LuxTrade Alert !!! You have a new sell order',
+            $message_body
+        );
+
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
+
 
 }
 
@@ -743,6 +900,30 @@ function hid_ex_m_update_sell_order_data( $data, $where ){
     $table_name = $wpdb->prefix . 'hid_ex_m_sell_orders';
 
     $wpdb->update( $table_name, $data, $where );
+
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $asset_type = hid_ex_m_get_asset_type($data["asset_type"]);
+        $asset_name = hid_ex_m_get_asset_name($data["asset_type"],$data["asset_id"]);
+        $qty = $data["quantity_sold"];
+        $fee = $data["amount_to_recieve"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because admin just updated your sell order.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity Sold : $qty\nAmount to Recieve : $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Sell order updated by Admin',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
 
 }
 
@@ -838,6 +1019,42 @@ function hid_ex_m_create_new_support_ticket( $data ){
         $table_name,
         $data
     );
+
+    try {
+
+        $customer = get_userdata($data["customer"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $title = $data["title"];
+        
+        if ($data["requester"] == "Admin"){
+
+            $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because admin just opened a support ticket for you with the title - '$title'.\n\nKindly return to Luxtrade and sign into your dashboard; Checkout the Supports tab to know more about the ticket.\n\nCheers!!!\nLuxtrade - Admin";
+
+            wp_mail(
+                $email,
+                'LuxTrade Alert !!! New Support Ticket from Admin',
+                $message_body
+            );
+
+        } else {
+
+            $name = hid_ex_m_get_customer_data_name($data["customer"]);
+
+            $message_body = "Greetings,\n\nYou're recieving this eMail Notification because a customer with the name $name just opened a support ticket for you with the title - '$title'.\n\nKindly login to Luxtrade WP Admin to know more about the ticket.\n\nCheers!!!\nLuxtrade - Admin";
+
+            wp_mail(
+                get_option('business_email'),
+                "LuxTrade Alert !!! New Support Ticket from $name",
+                $message_body
+            );
+        }
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
 
 }
 
@@ -1267,6 +1484,46 @@ function hid_ex_m_get_withdrawal_status($customer_id){
 
 }
 
+function hid_ex_m_get_wallet_transaction_type($type){
+
+    $output = "";
+
+    if ($type == 1){
+        $output = "Deposit";
+
+    } else if ($type == 2){
+
+        $output = "Withdrawal";
+
+    }
+
+    return $output;
+}
+
+function hid_ex_m_get_wallet_transaction_mode($data, $type){
+
+    $result = "";
+
+    $output = hid_ex_m_get_wallet_transaction_type($type);
+
+    if ($data == 0){
+
+        $result = "Local Bank $output";
+
+    } else if ($data == 1){
+
+        $result = "eCurrency $output";
+
+    } else if ($data == 2){
+
+        $result = "Crypto Currency $output";
+
+    }
+
+    return $result;
+
+}
+
 function hid_ex_m_create_new_wallet_transaction( $data ){
 
     global $wpdb;
@@ -1277,6 +1534,38 @@ function hid_ex_m_create_new_wallet_transaction( $data ){
         $data
     );
 
+
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $mode = hid_ex_m_get_wallet_transaction_mode($data["mode"], $data["transaction_type"]);
+        $amount = $data["amount"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because your $mode of # $amount was successful and is pending review.\n\nKindly return to Luxtrade and sign into your dashboard; Visit the wallets tab to know more.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            "LuxTrade Alert !!! $mode created Successfully",
+            $message_body
+        );
+
+        $name = hid_ex_m_get_customer_data_name($data["customer_id"]);
+
+        $message_body = "Greetings,\n\nYou're recieving this eMail Notification because a customer by the name $name just made a $mode of # $amount and is pending review.\n\nKindly return to Luxtrade and sign into WP Admin to view and update the wallet transaction.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            get_option('business_email'),
+            "LuxTrade Alert !!! You have a new $mode to review",
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
 
 }
 
@@ -1420,6 +1709,18 @@ function hid_ex_m_get_all_withdrawals(){
 
 }
 
+function hid_ex_m_get_one_wallet_transaction($id){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE id=$id");
+
+    return $result[0];
+
+}
+
 function hid_ex_m_get_all_deposits(){
 
     global $wpdb;
@@ -1452,7 +1753,30 @@ function hid_ex_m_update_transaction_status( $status, $id ){
         $where
     );
 
-    hid_ex_m_update_last_activity( $where['id'] );
+    try {
+
+        $transaction = hid_ex_m_get_one_wallet_transaction($id);
+
+        $customer = get_userdata($transaction->customer_id);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $mode = hid_ex_m_get_wallet_transaction_mode($transaction->mode, $transaction->transaction_type);
+        $amount = $transaction->amount;
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because your $mode of # $amount was just got updated by Luxtrade Admin.\n\nKindly return to Luxtrade and sign into your dashboard; Visit the wallets tab to know more.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            "LuxTrade Alert !!! $mode updated by Admin",
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
 
 }
 

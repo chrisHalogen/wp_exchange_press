@@ -2418,11 +2418,11 @@ jQuery(document).ready( function($){
 
                 let account_balance = document.getElementById('account_balance');
 
-                // if (amount_input_w.value > account_balance.value ){
+                if (amount_input_w.value > account_balance.value ){
 
-                //     message += "<br>Insufficient Balance";
+                    message += "<br>Insufficient Balance";
                     
-                // }
+                }
 
                 if ( message ){
                     failure_message_w( message );
@@ -2460,11 +2460,11 @@ jQuery(document).ready( function($){
 
                 let account_balance = document.getElementById('account_balance');
 
-                // if (amount_input_w.value > account_balance.value ){
+                if (amount_input_w.value > account_balance.value ){
 
-                //     message += "<br>Insufficient Balance";
+                    message += "<br>Insufficient Balance";
                     
-                // }
+                }
 
                 if ( message ){
                     failure_message_w( message );
@@ -2512,10 +2512,12 @@ jQuery(document).ready( function($){
 
                         },2000)
 
-                    } else {
+                    } else if (data['data'] == 0) {
                         
-                        failure_message_w('An unknown error occured');
+                        failure_message_w('Insufficient Balance');
 
+                    } else {
+                        failure_message_w('An Unknown Error Occured');
                     }
 
                 },
