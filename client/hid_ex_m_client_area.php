@@ -17,7 +17,8 @@
             'name'      => strtolower($page_name),
             'current_user_id'   => $current_user->ID,
             'current_user_display_name' => $current_user->display_name,
-            'db_data'       => hid_ex_m_get_dashboard_data($current_user->ID)
+            'db_data'       => hid_ex_m_get_dashboard_data($current_user->ID),
+            'account_balance'   => hid_ex_m_get_account_balance($current_user->ID) 
         );
 
         hid_ex_m_customer_dashboard( $page_data );
@@ -384,7 +385,7 @@ function hid_ex_m_customer_area_wallet( $page_data ){
 
                         <?php
                         
-                            if (empty($page_data['db_data']['pending_payments'])){
+                            if (empty($page_data['db_data']['all_transactions'])){
                                 
                                 echo "<center><p>You haven't made any transactions</p></center>";
 
@@ -790,8 +791,8 @@ function hid_ex_m_customer_dashboard( $page_data ){
                     </div>
                     <div class="summary-card">
                         <i class="fa-solid fa-sack-dollar"></i>
-                        <span>#<?php echo $page_data['db_data']['total_bought'] ?></span>
-                        <p>Total Bought</p>
+                        <span>#<?php echo $page_data['db_data']['pending_payments'] ?></span>
+                        <p>Pending Payments</p>
                     </div>
                     <div class="summary-card">
                         <i class="fa-solid fa-rotate"></i>
@@ -800,8 +801,8 @@ function hid_ex_m_customer_dashboard( $page_data ){
                     </div>
                     <div class="summary-card">
                         <i class="fa-solid fa-wallet"></i>
-                        <span>#<?php echo $page_data['db_data']['pending_payments'] ?></span>
-                        <p>Pending Payments</p>
+                        <span>#<?php echo $page_data['account_balance'] ?></span>
+                        <p>Wallet Balance</p>
                     </div>
                     
                 </div>

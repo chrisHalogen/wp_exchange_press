@@ -125,7 +125,7 @@ function hid_ex_m_create_supports_chat_table() {
     $sql = "CREATE TABLE $table_name (
 		id int NOT NULL AUTO_INCREMENT,
         sender tinytext NOT NULL,
-        time_stamp DATETIME NOT NULL DEFAULT, CURRENT_TIMESTAMP,
+        time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         message text NOT NULL,
 		attachment int NOT NULL DEFAULT 0,
         ticket int NOT NULL,
@@ -211,7 +211,6 @@ function hid_ex_m_create_wallet_transactions_table() {
         transaction_type int NOT NULL,
         time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         amount decimal(10,2) NOT NULL,
-        account_balance decimal(10,2) NOT NULL,
         mode tinyint NOT NULL,
         details text NOT NULL,
         proof_of_payment int NOT NULL,

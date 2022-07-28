@@ -116,7 +116,7 @@ function hid_ex_m_announcement_create_view(){
         hid_ex_m_create_new_announcement( $data );
         
         $result = wp_mail(
-            'christackoms@gmail.com',
+            get_option('business_email'),
             'LuxTrade Alert - New Announcement Published',
             "This is to notify you that a new alert was just published on your platform.\nDo well to check it out"
         );

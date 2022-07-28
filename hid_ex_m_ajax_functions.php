@@ -220,7 +220,7 @@ function hid_ex_m_check_if_user_exists() {
             $data = 1;
         }
 
-        write_log($data);
+        // write_log($data);
 
         wp_send_json_success( $data );
     }
@@ -249,7 +249,7 @@ function hid_ex_m_check_if_user_password_matches() {
             $data = 1;
         } 
 
-        write_log($data);
+        // write_log($data);
 
         wp_send_json_success( $data );
     }
@@ -317,7 +317,7 @@ function hid_ex_m_complete_user_registration() {
             $_REQUEST['data']['username']
         );
 
-        write_log("User Created");
+        // write_log("User Created");
 
         wp_send_json_success();
     }
@@ -420,7 +420,7 @@ function hid_ex_m_submit_sell_order() {
 
             hid_ex_m_create_new_sell_order( $input_data );
 
-            write_log($input_data);
+            // write_log($input_data);
 
             $output = 1;
             
@@ -492,7 +492,7 @@ function hid_ex_m_submit_buy_order() {
 
             hid_ex_m_create_new_buy_order( $input_data );
 
-            write_log($input_data);
+            // write_log($input_data);
 
             $output = 1;
             
@@ -606,7 +606,7 @@ function hid_ex_m_create_a_new_chat() {
 
                 $upload = wp_upload_bits($_FILES["file"]["name"], null, file_get_contents($_FILES["file"]["tmp_name"]));
 
-                write_log($upload);
+                // write_log($upload);
 
                 $type = '';
                 if (!empty($upload['type'])) {
