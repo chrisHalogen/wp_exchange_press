@@ -143,6 +143,14 @@ function addAdminPageContent() {
     );
 
     add_submenu_page('exchange-manager',//parent page slug
+        'Manage Gift Cards',//page title
+        'Manage Gift Cards',//menu title
+        'manage_options',//manage optios
+        'giftcard-management',//slug
+        'hid_ex_m_giftcards_master_view'//function
+    );
+
+    add_submenu_page('exchange-manager',//parent page slug
         'Wallets',//page title
         'Wallets',//menu title
         'manage_options',//manage optios
@@ -194,6 +202,12 @@ function hid_ex_m_rewrite_rules(){
         'top' // Position on the URL Stack
     );
 
+    // add_rewrite_rule(
+    //     'authentication/reset-customer-password/([a-zA-Z0-9-]+)[/]/([a-zA-Z0-9-]+)[/]?$', // Regular Expression
+    //     'index.php?authentication_user=$matches[1]&authentication_user_token=$matches[2]', // Query Parameters
+    //     'top' // Position on the URL Stack
+    // );
+
     // /^[0-9A-Za-z\s\-]+$/
     // ^[A-Za-z0-9_-]*$
     // ([a-z]+)[/]?$
@@ -211,6 +225,8 @@ add_filter( 'query_vars' , function( $query_vars ){
     // You have to register the query variables to make sure WordPress Recognizes them
 
     $query_vars[] = 'authentication_page_name';
+    // $query_vars[] = 'authentication_user';
+    // $query_vars[] = 'authentication_user_token';
     $query_vars[] = 'customer_page_name';
 
     // Now Return the Query Variables
@@ -231,6 +247,18 @@ add_action( 'template_include', function( $template ) {
         }
         
     }
+
+    // if ( get_query_var( 'authentication_user' ) != false && get_query_var( 'authentication_user_token' ) != false && get_query_var( 'authentication_user' ) != '' && get_query_var( 'authentication_user_token' ) != '' ) {
+
+    //     if ( is_user_logged_in() ){
+            
+    //         wp_redirect(site_url('/customer-area/dashboard/'));
+    //     } else {
+
+    //         return HID_EX_M_ROOTDIR . 'client/hid_ex_m_password_reset.php';
+    //     }
+        
+    // }
 
     if ( get_query_var( 'customer_page_name' ) != false && get_query_var( 'customer_page_name' ) != '' ) {
 

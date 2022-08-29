@@ -127,7 +127,6 @@ function hid_ex_m_sell_order_create_view(){
             'quantity_sold'         => (float)$_POST['quantity'],
             'amount_to_recieve'     => (float)$_POST['hidden-fee'],
             'proof_of_payment'      => $_POST['icon-media-id'],
-            'sending_instructions'   => $_POST['sending-instruction'],
             'order_status'          => $_POST['status']
         );
 
@@ -257,7 +256,7 @@ function hid_ex_m_sell_order_create_view(){
                         </td>
                     </tr>
 
-                    <tr>
+                    <!-- <tr>
                         <th scope="row">
                             <label for="sending-instruction">Sending Instruction</label>
                         </th>
@@ -266,7 +265,7 @@ function hid_ex_m_sell_order_create_view(){
 
                             <p class="description">How will your customer recieve their payment</p>
                         </td>
-                    </tr>
+                    </tr> -->
 
                     <tr>
                         <th scope="row">
@@ -311,7 +310,6 @@ function hid_ex_m_update_sell_order_view(){
             'quantity_sold'         => (float)$_POST['quantity'],
             'amount_to_recieve'     => (float)$_POST['hidden-fee'],
             'proof_of_payment'      => $_POST['icon-media-id'],
-            'sending_instructions'   => $_POST['sending-instruction'],
             'order_status'          => $_POST['status']
         );
 
@@ -319,8 +317,36 @@ function hid_ex_m_update_sell_order_view(){
             'id' => $_POST['id']
         );
 
-        hid_ex_m_update_sell_order_data( $data, $where );
+        $current_transaction = hid_ex_m_get_sell_order_data( $_POST['id'] );
 
+        $customer_id = intval($_POST['customer']);
+
+        $current_status = $current_transaction->order_status;
+
+        $new_status = intval($_POST['status']);
+
+        if ( $current_status != 2 && $new_status == 2){
+            $current_balance = hid_ex_m_get_account_balance($customer_id);
+
+            $new_balance = $current_balance + (float)$_POST['hidden-fee'];
+
+            update_user_meta($customer_id, 'account_balance',$new_balance);
+
+            echo "<span><strong>User have been credited successfully</strong></span>";
+
+        } else if ( $current_status == 2 && $new_status != 2){
+
+            $current_balance = hid_ex_m_get_account_balance($customer_id);
+
+            $new_balance = $current_balance - (float)$_POST['hidden-fee'];
+
+            update_user_meta($customer_id, 'account_balance',$new_balance);
+
+            echo "<span><strong>User have been debited</strong></span>";
+
+        }
+
+        hid_ex_m_update_sell_order_data( $data, $where );
 
         echo "<script>location.replace('admin.php?page=sell-orders-management');</script>";
 
@@ -466,16 +492,7 @@ function hid_ex_m_update_sell_order_view(){
                         </td>
                     </tr>
 
-                    <tr>
-                        <th scope="row">
-                            <label for="sending-instruction">Sending Instruction</label>
-                        </th>
-                        <td>
-                            <textarea name="sending-instruction" class="regular-text" id="sending-instruction" cols="40" rows="5"><?php echo $order_data->sending_instructions ?></textarea>
-
-                            <p class="description">How will your customer recieve the asset</p>
-                        </td>
-                    </tr>
+                    
 
                     <tr>
                         <th scope="row">

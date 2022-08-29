@@ -17,10 +17,7 @@ function hid_ex_m_get_e_assets() {
         } catch (\Throwable $th) {
             write_log($th);
         }
-
         
-
-
         // wp_send_json_success( $data = $output );
     }
 
@@ -413,7 +410,6 @@ function hid_ex_m_submit_sell_order() {
                 'quantity_sold' => (float)($_REQUEST['entered_quantity']),
                 'amount_to_recieve' => $_REQUEST['amount_to_recieve'],
                 'proof_of_payment'  => $data,
-                'sending_instructions' => $_REQUEST['sending'],
                 'order_status'  => 1
                 
             );
@@ -723,7 +719,7 @@ function hid_ex_m_credit_wallet() {
                 'transaction_status'    => 1
             );
 
-            write_log($input_data);
+            // write_log($input_data);
 
             hid_ex_m_create_new_wallet_transaction( $input_data );
 
@@ -752,7 +748,14 @@ function hid_ex_m_debit_wallet() {
 
         // Check if user's account balance is sufficient
 
-        if (!(hid_ex_m_get_account_balance(get_current_user_id()) < $_REQUEST['amount_'] )){
+        $current_balance = hid_ex_m_get_account_balance(get_current_user_id());
+
+        $withdrawable_amount = $current_balance - 100;
+
+        // write_log("Current balance = $current_balance");
+        // write_log("Requested amount =".$_REQUEST['amount_']);
+
+        if ( $_REQUEST['amount_'] < $withdrawable_amount ){
 
             try {           
                 
@@ -767,7 +770,7 @@ function hid_ex_m_debit_wallet() {
                     'transaction_status'    => 1
                 );
 
-                write_log($input_data);
+                // write_log($input_data);
 
                 hid_ex_m_create_new_wallet_transaction( $input_data );
 

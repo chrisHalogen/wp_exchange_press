@@ -43,3 +43,6 @@ require_once (HID_EX_M_ROOTDIR.'hid_ex_m_ajax_functions.php');
 require_once (HID_EX_M_ROOTDIR.'hid_ex_m_support.php');
 require_once (HID_EX_M_ROOTDIR.'client/hid_ex_m_misc.php');
 require_once (HID_EX_M_ROOTDIR.'hid_ex_m_wallet_transactions.php');
+require_once (HID_EX_M_ROOTDIR.'rest/hid_ex_m_rest_auth.php');
+require_once (HID_EX_M_ROOTDIR.'rest/hid_ex_m_rest_fxn.php');
+require_once (HID_EX_M_ROOTDIR.'hid_ex_m_giftcards.php');

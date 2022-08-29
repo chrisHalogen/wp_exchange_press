@@ -294,33 +294,14 @@ function hid_ex_m_customer_area_wallet( $page_data ){
                                     <p class="label-paragraph">Withdrawal Mode</p>
                                     <div class="mode-radio-buttons">
                                         <label>
-                                            <input class="mode-btn-0" name="mode_w" type="radio" value="0"> Local Bank Transfer
+                                            <input class="mode-btn-0" name="mode_w" type="radio" value="0" checked> Local Bank Transfer
                                         </label>
 
-                                        <label>
-                                            <input class="mode-btn-1" name="mode_w" type="radio" id="mode-btn-1_w" value="1"> eCurrency
-                                        </label>
-
-                                        <label>
-                                            <input class="mode-btn-2" id="mode-btn-2_w" name="mode_w" type="radio" value="2"> Crypto Currency
-                                        </label>
-                                        <p class="description">How do you want to process your Withdrawal?</p>
+                                        <p class="description">How do you want to process your Withdrawal?<br>Only Local Bank Withdrawals are available at the moment<br><span style="color:red">You must have a minimum of <strong>#100<strong>  left<span></p>
             
                                     </div>
                                 </div>
-                                <div style="align-items: center;" class="form-group">
-                                    
-                                    <p class="label-paragraph">Select Asset</p>
-            
-                                    <div id="select-input-wrapper_w">
-                                        <select name="selected-asset" id="selected-asset_w" class="selected-asset">
-                                            <option value="0">Select Asset</option>
-                                            
-                                        </select>
-                                        <p class="description">Select the asset to withdraw</p>
-                                    </div>
-            
-                                </div>
+                                
             
                                 <h2>Amount</h2>
                                 <hr class="section-divider">
@@ -334,24 +315,7 @@ function hid_ex_m_customer_area_wallet( $page_data ){
             
                                 </div>
 
-                                <div class="form-group" style="align-items: center;">
-                                    <p class="label-paragraph">Quantity</p>
-            
-                                    <div id="quantity_wrapper_w">
-                                        <input type="text" name="quantity" id="quantity_w">
-                                        <p class="description">What quantity do you want to withdraw?</p>
-                                    </div>
-            
-                                </div>
-            
-                                <div class="form-group" style="align-items: center;">
-                                    <p class="label-paragraph">Amount</p>
-            
-                                    <div id="fee_wrapper_w">
-                                        <p class="label-paragraph"><span id="amount-output_w"></span> </p>
-                                        <p class="description">Exchange Rate - <span id="rate_output_w">0</span><br>This amount will be withdrawn from your wallet balance</p>
-                                    </div>
-                                </div>
+                                
             
                                 <h2>Payment</h2>
                                 <hr class="section-divider">
@@ -359,8 +323,8 @@ function hid_ex_m_customer_area_wallet( $page_data ){
                                     <p class="label-paragraph">Sending Instructions</p>
             
                                     <div>
-                                        <textarea placeholder="e.g Wallet Address, Local bank account, eMail Address..." name="" id="sending-instructions_w" cols="80" rows="5"></textarea>
-                                        <p class="description">How should we credit you?</p>
+                                        <textarea placeholder="Enter your Local Bank Account Details" name="" id="sending-instructions_w" cols="80" rows="5"></textarea>
+                                        <p class="description">Where should we send your withdrawal to?</p>
                                     </div>
             
                                 </div>
@@ -1045,13 +1009,13 @@ function hid_ex_m_customer_area_sell_to_us( $page_data ){
                         <p class="label-paragraph">Sending Instructions</p>
 
                         <div>
-                            <textarea id="sending-instructions" name="" id="" cols="80" rows="5" disabled>-</textarea>
+                            <textarea id="sending-instructions" name="" cols="80" rows="5" disabled>-</textarea>
                             <p class="description">Follow this instructions to send us the Asset</p>
                         </div>
 
                     </div>
 
-                    <div class="form-group" >
+                    <!-- <div class="form-group" >
                         <p class="label-paragraph">Recieving Instructions</p>
 
                         <div>
@@ -1059,7 +1023,7 @@ function hid_ex_m_customer_area_sell_to_us( $page_data ){
                             <p class="description">Where should we credit you?</p>
                         </div>
 
-                    </div>
+                    </div> -->
 
                     <div class="form-group" >
                         <p class="label-paragraph">Proof of payment</p>

@@ -86,6 +86,57 @@ function hid_ex_m_create_crypto_currency_assets_table() {
     add_option( 'jal_db_version', $jal_db_version );
 }
 
+// Create the Giftcards Tables
+function hid_ex_m_create_giftcards_table() {
+    global $wpdb;
+    global $jal_db_version;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+		id int NOT NULL AUTO_INCREMENT,
+		name tinytext NOT NULL,
+        short_name tinytext NOT NULL,
+		icon tinytext NOT NULL,
+        buying_price decimal(10,2) NOT NULL,
+		PRIMARY KEY  (id)
+	) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
+    add_option( 'jal_db_version', $jal_db_version );
+}
+
+// Create the Giftcard Orders Tables
+function hid_ex_m_create_giftcard_orders_table() {
+    global $wpdb;
+    global $jal_db_version;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE $table_name (
+		id int NOT NULL AUTO_INCREMENT,
+		customer_id tinytext NOT NULL,
+        time_stamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        asset_id tinyint NOT NULL,
+        quantity decimal(20,7) NOT NULL,
+        price decimal(20,2) NOT NULL,
+        order_status tinyint DEFAULT '1',
+        card_picture int NOT NULL,
+		PRIMARY KEY (id)
+	) $charset_collate;";
+
+    require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+    dbDelta( $sql );
+
+    add_option( 'jal_db_version', $jal_db_version );
+}
+
 // Create the Support Tickets Tables
 function hid_ex_m_create_supports_ticket_table() {
     global $wpdb;
@@ -185,7 +236,6 @@ function hid_ex_m_create_sell_orders_table() {
         quantity_sold decimal(20,7) NOT NULL,
         amount_to_recieve decimal(20,2) NOT NULL,
         proof_of_payment int NOT NULL,
-        sending_instructions text NOT NULL,
         order_status tinyint DEFAULT '1',
 		PRIMARY KEY (id)
 	) $charset_collate;";
@@ -260,6 +310,8 @@ function hid_ex_m_run_on_activation(){
     hid_ex_m_create_sell_orders_table();
     hid_ex_m_create_announcements_table();
     hid_ex_m_create_wallet_transactions_table();
+    hid_ex_m_create_giftcards_table();
+    hid_ex_m_create_giftcard_orders_table();
 
 }
 
@@ -277,7 +329,9 @@ function hid_ex_m_run_on_deactivation(){
         'hid_ex_m_buy_orders',
         'hid_ex_m_sell_orders',
         'hid_ex_m_announcements',
-        'hid_ex_m_wallet_transactions'
+        'hid_ex_m_wallet_transactions',
+        'hid_ex_m_giftcards',
+        'hid_ex_m_giftcard_orders'
     ];
 
     foreach ($table_extensions as $extension) {
@@ -507,6 +561,187 @@ function hid_ex_m_get_crypto_currency_data( $asset_id ){
     $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$asset_id'");
 
     return $result[0];
+}
+
+// Giftcards
+function hid_ex_m_create_new_giftcard( $data ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $wpdb->insert(
+        $table_name,
+        $data
+    );
+
+}
+
+function hid_ex_m_get_giftcard_data( $asset_id ){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$asset_id'");
+
+    return $result[0];
+}
+
+function hid_ex_m_get_all_giftcards(){
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name");
+
+    return $result;
+}
+
+function hid_ex_m_delete_giftcard( $asset_id ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $wpdb->query("DELETE FROM $table_name WHERE id='$asset_id'");
+
+}
+
+function hid_ex_m_update_giftcard_data( $data, $where ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcards';
+
+    $wpdb->update( $table_name, $data, $where );
+
+}
+
+// Giftcard Orders
+function hid_ex_m_get_all_giftcard_orders(){
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name");
+
+    return $result;
+}
+
+function hid_ex_m_delete_giftcard_order( $order_id ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $wpdb->query("DELETE FROM $table_name WHERE id='$order_id'");
+
+}
+
+function hid_ex_m_get_giftcard_order_data( $order_id ){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$order_id'");
+
+    return $result[0];
+}
+
+function hid_ex_m_create_new_giftcard_order( $data ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $wpdb->insert(
+        $table_name,
+        $data
+    );
+
+    try {
+
+        $customer = get_userdata($data["customer_id"]);
+        $email = $customer->user_email;
+        $name = $customer->display_name;
+        $asset_type = "Giftcard";
+        $asset = hid_ex_m_get_giftcard_data( $data['asset_id'] );
+        $asset_name = $asset->name;;
+        $qty = $data["quantity"];
+        $fee = $data["price"];
+        
+        $message_body = "Greetings $name,\n\nYou're recieving this eMail Notification because your Giftcard Order was placed successfully and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity : $qty\nAmount you get : $fee\n\nKindly return to Luxtrade and sign into your dashboard to continue trading Crypto and other digital assets.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            $email,
+            'LuxTrade Alert !!! Giftcard Order Created Successfully',
+            $message_body
+        );
+
+        $name = hid_ex_m_get_customer_data_name($data["customer_id"]);
+
+        $message_body = "Greetings,\n\nYou're recieving this eMail Notification because a customer by the name $name just made a Giftcard Order and is pending review.\n\nBelow are some of the order details\nAsset Type : $asset_type\nAsset : $asset_name\nQuantity : $qty\nFee : # $fee\n\nKindly return to Luxtrade and sign into WP Admin to view and update the order.\n\nCheers!!!\nLuxtrade - Admin";
+
+        wp_mail(
+            get_option('business_email'),
+            'LuxTrade Alert !!! You have a new Buy Order',
+            $message_body
+        );
+
+    } catch (\Throwable $th) {
+
+        write_log($th);
+
+    }
+
+}
+
+function hid_ex_m_mark_giftcard_as_declined( $where ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $data = array(
+        'order_status' => 0
+    );
+
+    $wpdb->update(
+        $table_name,
+        $data,
+        $where
+    );
+
+}
+
+function hid_ex_m_mark_giftcard_as_pending( $where ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $data = array(
+        'order_status' => 1
+    );
+
+    $wpdb->update(
+        $table_name,
+        $data,
+        $where
+    );
+
+}
+
+function hid_ex_m_mark_giftcard_as_approve( $where ){
+
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $data = array(
+        'order_status' => 2
+    );
+
+    $wpdb->update(
+        $table_name,
+        $data,
+        $where
+    );
+
 }
 
 // Customers
@@ -1121,6 +1356,10 @@ function hid_ex_m_delete_support_ticket( $id ){
 
     $wpdb->query("DELETE FROM $table_name WHERE id='$id'");
 
+    $table_name = $wpdb->prefix . 'hid_ex_m_supports_chat';
+
+    $wpdb->query("DELETE FROM $table_name WHERE ticket='$id'");
+
 }
 
 function hid_ex_m_get_single_ticket_data( $ticket_id ){
@@ -1460,10 +1699,11 @@ function hid_ex_m_get_account_balance($customer_id){
         add_user_meta( $customer_id, 'can_withdraw', 1);
     }
 
-    return get_user_meta($customer_id, 'account_balance')[0];
+    $current_bal = get_user_meta($customer_id, 'account_balance')[0];
+
+    return round($current_bal, 2);
 
 }
-
 
 
 // Get account balance
@@ -1797,3 +2037,110 @@ function hid_ex_m_update_wp_option( $option_key, $option_value ){
     }
 
 }
+
+function hid_ex_m_password_reset_eMail( $user_id, $user_eMail ){
+
+    $password_reset_token = hid_ex_m_generateRandomString();
+    $password_reset_key = hid_ex_m_generateRandomString();
+    $password_reset_iv = hid_ex_m_generateRandomString();
+    $password_reset_string = $password_reset_token . "," . $password_reset_key . "," . $password_reset_iv;
+
+    $encrypted_string = hid_ex_m_twoway_encrypt(
+        $password_reset_token, 
+        $password_reset_key, 
+        $password_reset_iv, 
+        'e'
+    );
+
+    $encrypted_string = substr( $encrypted_string, 0, strlen($encrypted_string) - 1 );
+
+    // Send Mail
+    $mail_subject = "LuxTrade Alert !!! You requested for Password Reset";
+    $customer = get_userdata($user_id);
+    $name = $customer->display_name;
+    $username = $customer->user_login;
+    $password_reset_url = site_url( "/authentication/reset-password/?customer=$username&token=$encrypted_string" );
+
+    $email_body = "<p>Greetings $name</p><p>You are recieving this eMail because you requested for a password reset. <a href='$password_reset_url'>Follow this link</a> to reset your password</p><p>If you can't click on the link above, copy this link to your web browser - <code>$password_reset_url</code></p><p>If you haven't requested for any password reset, kindly ignore this eMail</p><p>Thank You</p>";
+
+    add_filter( 'wp_mail_content_type', 'hid_ex_m_set_html_content_type' );
+
+    wp_mail( $user_eMail, $mail_subject, $email_body );
+
+    remove_filter( 'wp_mail_content_type', 'hid_ex_m_set_html_content_type' );
+
+    add_user_meta($user_id, "password_reset_cridentials", $password_reset_string);
+
+}
+
+function hid_ex_m_twoway_encrypt($input_str, $secret_key, $secret_iv, $action = 'e'){
+
+    $output = null;
+
+    $key = hash('sha256', $secret_key);
+    $iv = substr(hash('sha256', $secret_iv), 0, 16);
+
+    if($action == 'e'){
+
+       $output = base64_encode(
+                openssl_encrypt(
+                    $input_str, "AES-256-CBC", $key, 0, $iv)
+            );
+
+    }else if($action == 'd'){
+
+       $output = openssl_decrypt(
+            base64_decode($input_str),
+            "AES-256-CBC", $key, 0, $iv
+        );
+
+    }
+
+    return $output;
+}
+
+function hid_ex_m_generateRandomString($length = 30) {
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+
+    return $randomString;
+}
+
+function hid_ex_m_set_html_content_type() {
+    return 'text/html';
+}
+
+function hid_ex_m_check_token($user_id, $token) {
+    
+    $token_string = get_user_meta($user_id, "password_reset_cridentials");
+
+    $last = count($token_string) - 1;
+
+    $token_string = $token_string[$last];
+
+    // write_log($token_string);
+
+    $cridentials = explode(",", $token_string);
+
+    $decrypted_string = hid_ex_m_twoway_encrypt(
+        $token . "=", 
+        $cridentials[1], 
+        $cridentials[2], 
+        'd'
+    );
+
+    // write_log($decrypted_string);
+    // write_log($cridentials[0]);
+
+    if ($decrypted_string == $cridentials[0]){
+        return 1;
+    }
+
+    return 0;
+}
+

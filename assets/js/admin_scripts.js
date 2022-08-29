@@ -10,6 +10,10 @@ jQuery(document).ready( function($){
 
     const substring2 = 'admin.php?page=crypto-currency-management&tab=create-new';
 
+    const giftcard = 'admin.php?page=giftcard-management&tab=create-new';
+
+    let update_giftcard = 'admin.php?page=giftcard-management&tab=update-giftcard';
+
     const substring3 = 'admin.php?page=crypto-currency-management&tab=update-crypto-currency';
 
     const substring4 = 'admin.php?page=e-currency-management&tab=update-e-currency';
@@ -20,7 +24,7 @@ jQuery(document).ready( function($){
 
     let support_chat = 'admin.php?page=support&tab=chat';
 
-    const condition = string.includes(substring) || string.includes(substring2) || string.includes(substring3) || string.includes(substring4) || string.includes(buy_order) || string.includes(update_buy_order) || string.includes(sell_order) || string.includes(update_sell_order);
+    const condition = string.includes(substring) || string.includes(substring2) || string.includes(substring3) || string.includes(substring4) || string.includes(buy_order) || string.includes(update_buy_order) || string.includes(sell_order) || string.includes(update_sell_order) || string.includes(giftcard) || string.includes(update_giftcard);
 
 
     if (condition){

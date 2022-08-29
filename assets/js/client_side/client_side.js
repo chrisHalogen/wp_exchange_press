@@ -656,23 +656,7 @@ jQuery(document).ready( function($){
             // console.log(image_input.files[0]);
         }) 
 
-        let recieving = document.getElementById('recieving-instructions');
-
-        function isRecieving(data){
-
-            return /^[0-9A-Za-z\s\-]+$/.test(data);
-            
-        }
-
-        recieving.addEventListener('input',function(){
-            if (!isRecieving(recieving.value)){
-                recieving.value = recieving.value.slice(0,-1)
-            } else{
-
-                null;
-                
-            }
-        })
+        
 
         let order_form = document.getElementById('order-form');
 
@@ -687,7 +671,7 @@ jQuery(document).ready( function($){
             let check_asset = false;
             let check_quantity = false;
             let check_proof = false;
-            let check_recieving = false;
+            // let check_recieving = false;
 
             // asset_radio_selected.value == 1
 
@@ -712,14 +696,9 @@ jQuery(document).ready( function($){
                 check_proof = true;
             }
 
-            if (recieving.value.length < 6){
-                check_recieving = false;
-                error_message += "Invalid Recieving Instructions<br>";
-            } else {
-                check_recieving = true;
-            }
+            
 
-            if (check_asset && check_quantity && check_proof && check_recieving){
+            if (check_asset && check_quantity && check_proof){
 
                 document.getElementById('error-message').style.display = 'none';
 
@@ -728,7 +707,7 @@ jQuery(document).ready( function($){
                 formData.append('file', image_input.files[0]);
                 formData.append('amount_to_recieve',price.toFixed(2));
                 formData.append('chosen_asset_type', asset_number);
-                formData.append('sending', recieving.value);
+                // formData.append('sending', recieving.value);
                 formData.append('chosen_asset_id', assets_select_menu.value);
                 formData.append('entered_quantity', quantity_element.value);
                 formData.append('action', 'hid_ex_m_submit_sell_order');
@@ -1804,14 +1783,6 @@ jQuery(document).ready( function($){
 
         let withdrawal_button = document.getElementById('withdrawal-wallet-btn');
 
-        // let selected_rate = 0;
-
-        // let mode = 20;
-
-        // let instructions = "";
-
-        // let asset_type_indicator = "";
-
         open_btn.addEventListener('click', function(){
 
             withdrawal_form.style.display = 'none';
@@ -2182,29 +2153,29 @@ jQuery(document).ready( function($){
 
         let mode_radio_w = document.getElementsByName("mode_w");
 
-        let select_wrapper_w = document.getElementById('select-input-wrapper_w');
+        // let select_wrapper_w = document.getElementById('select-input-wrapper_w');
 
-        let select_element_w = document.getElementById('selected-asset_w');
+        // let select_element_w = document.getElementById('selected-asset_w');
 
         let amount_w = document.getElementById('amount_wrapper_w');
 
         let amount_input_w = document.getElementById("amount_w");
 
-        amount_input.defaultValue = 0;
+        // amount_input.defaultValue = 0;
 
-        let quantity_w = document.getElementById('quantity_wrapper_w');
+        // let quantity_w = document.getElementById('quantity_wrapper_w');
 
-        let fee_wrapper_w = document.getElementById('fee_wrapper_w');
+        // let fee_wrapper_w = document.getElementById('fee_wrapper_w');
 
-        let ecurrency_asset_w = document.getElementById("mode-btn-1_w");
+        // let ecurrency_asset_w = document.getElementById("mode-btn-1_w");
 
-        let crypto_asset_w = document.getElementById("mode-btn-2_w");
+        // let crypto_asset_w = document.getElementById("mode-btn-2_w");
 
-        let rate_output_w = document.getElementById('rate_output_w');
+        // let rate_output_w = document.getElementById('rate_output_w');
 
-        let quantity_input_w = document.getElementById('quantity_w');
+        // let quantity_input_w = document.getElementById('quantity_w');
 
-        let amount_output_w = document.getElementById('amount-output_w');
+        // let amount_output_w = document.getElementById('amount-output_w');
 
         withdrawal_button.addEventListener('click', function(){
 
@@ -2216,111 +2187,111 @@ jQuery(document).ready( function($){
             modal.style.opacity = "1";
             modal.style.visibility = "visible";
 
-            hide_input(quantity_w);
+            // hide_input(quantity_w);
 
-            hide_input(fee_wrapper_w);
+            // hide_input(fee_wrapper_w);
 
-            hide_input(select_wrapper_w);
+            // hide_input(select_wrapper_w);
 
-            hide_input(amount_w);
+            // hide_input(amount_w);
 
 
         })
 
-        ecurrency_asset_w.addEventListener('click', function(){
-            retrieve_currency_assets_w( 'hid_ex_m_get_e_assets' );
-        });
+        // ecurrency_asset_w.addEventListener('click', function(){
+        //     retrieve_currency_assets_w( 'hid_ex_m_get_e_assets' );
+        // });
 
-        crypto_asset_w.addEventListener('click', function(){
-            retrieve_currency_assets_w( 'hid_ex_m_get_crypto_assets' )
-        });
+        // crypto_asset_w.addEventListener('click', function(){
+        //     retrieve_currency_assets_w( 'hid_ex_m_get_crypto_assets' )
+        // });
 
-        for (let index = 0; index < mode_radio_w.length; index++) {
-            const element = mode_radio_w[index];
+        // for (let index = 0; index < mode_radio_w.length; index++) {
+        //     const element = mode_radio_w[index];
 
-            element.addEventListener('click',function(){
-                let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
+        //     element.addEventListener('click',function(){
+        //         let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
 
-                mode = mode_radio_selected_w.value;
+        //         mode = mode_radio_selected_w.value;
 
-                if (mode_radio_selected_w.value == 0){
+        //         if (mode_radio_selected_w.value == 0){
 
-                    // Hide elements
-                    hide_input(quantity_w);
+        //             // Hide elements
+        //             hide_input(quantity_w);
 
-                    hide_input(fee_wrapper_w);
+        //             hide_input(fee_wrapper_w);
 
-                    hide_input(select_wrapper_w);
+        //             hide_input(select_wrapper_w);
 
-                    // Show Elements
+        //             // Show Elements
 
-                    show_input(amount_w);
-                } else {
-                    // Hide elements
-                    hide_input(amount_w);
+        //             show_input(amount_w);
+        //         } else {
+        //             // Hide elements
+        //             hide_input(amount_w);
 
-                    // Show Elements
-                    show_input(quantity_w);
+        //             // Show Elements
+        //             show_input(quantity_w);
 
-                    show_input(fee_wrapper_w);
+        //             show_input(fee_wrapper_w);
 
-                    show_input(select_wrapper_w);
+        //             show_input(select_wrapper_w);
                     
-                }
-            })
+        //         }
+        //     })
             
-        }
+        // }
 
-        function retrieve_currency_assets_w(recipient){
+        // function retrieve_currency_assets_w(recipient){
 
-            $.ajax({
-                url: script_data.ajaxurl, 
-                data: {
-                    // The action is the WP function that'll handle this ajax request
-                    'action' : recipient
-                  },
-                  success:function( data ) {
+        //     $.ajax({
+        //         url: script_data.ajaxurl, 
+        //         data: {
+        //             // The action is the WP function that'll handle this ajax request
+        //             'action' : recipient
+        //           },
+        //           success:function( data ) {
                     
-                    if (data['data'].length > 0){
+        //             if (data['data'].length > 0){
 
-                        // console.log(data['data']);
+        //                 // console.log(data['data']);
 
-                        let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
+        //                 let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
 
-                        let outputhtml = "";
+        //                 let outputhtml = "";
 
-                        data['data'].forEach(element => {
+        //                 data['data'].forEach(element => {
 
-                            outputhtml += "<option rate=" + element['selling_price']+ " value=" + element['id'] +" short='"+ element['short_name'] +"'>"+ element['name'] + " | " + element['short_name'] + "</option>";
+        //                     outputhtml += "<option rate=" + element['selling_price']+ " value=" + element['id'] +" short='"+ element['short_name'] +"'>"+ element['name'] + " | " + element['short_name'] + "</option>";
 
-                        });
+        //                 });
 
-                        selected_rate = data['data'][0]['selling_price']
+        //                 selected_rate = data['data'][0]['selling_price']
 
-                        select_element_w.innerHTML = outputhtml;
+        //                 select_element_w.innerHTML = outputhtml;
 
-                        rate_output_w.innerHTML = selected_rate;
+        //                 rate_output_w.innerHTML = selected_rate;
 
-                        if (mode_radio_selected_w.value == 1){
+        //                 if (mode_radio_selected_w.value == 1){
 
-                            asset_type_indicator = 'Withdrawal || eCurr - ' + data['data'][0]['short_name'];
+        //                     asset_type_indicator = 'Withdrawal || eCurr - ' + data['data'][0]['short_name'];
 
                             
-                        } else {
+        //                 } else {
 
-                            asset_type_indicator = 'Withdrawal || Crypto - ' + data['data'][0]['short_name'];
+        //                     asset_type_indicator = 'Withdrawal || Crypto - ' + data['data'][0]['short_name'];
                             
-                        }
+        //                 }
                         
-                    }
+        //             }
                     
-                  },
-                  error: function( errorThrown ){
-                      window.alert( errorThrown );
-                  }
-              });
+        //           },
+        //           error: function( errorThrown ){
+        //               window.alert( errorThrown );
+        //           }
+        //       });
 
-        }
+        // }
 
         amount_input_w.addEventListener('input',function(){
             
@@ -2330,42 +2301,42 @@ jQuery(document).ready( function($){
 
         })
 
-        quantity_input_w.addEventListener('input',function(){
+        // quantity_input_w.addEventListener('input',function(){
             
-            if (!isNumberOrFloat(quantity_input_w.value)){
-                quantity_input_w.value = quantity_input_w.value.slice(0,-1)
-            } else {
+        //     if (!isNumberOrFloat(quantity_input_w.value)){
+        //         quantity_input_w.value = quantity_input_w.value.slice(0,-1)
+        //     } else {
 
-                let fee_ = quantity_input_w.value * selected_rate;
+        //         let fee_ = quantity_input_w.value * selected_rate;
 
-                amount_output_w.innerHTML = fee_.toFixed(2);
+        //         amount_output_w.innerHTML = fee_.toFixed(2);
 
-            }
-        })
+        //     }
+        // })
 
-        select_element_w.addEventListener("change", function(){
-            selected_rate = select_element_w.options[select_element_w.selectedIndex].getAttribute('rate');
+        // select_element_w.addEventListener("change", function(){
+        //     selected_rate = select_element_w.options[select_element_w.selectedIndex].getAttribute('rate');
 
-            let short = select_element_w.options[select_element_w.selectedIndex].getAttribute('short');
+        //     let short = select_element_w.options[select_element_w.selectedIndex].getAttribute('short');
 
-            rate_output_w.innerHTML = selected_rate;
+        //     rate_output_w.innerHTML = selected_rate;
 
-            let fee_ = quantity_input_w.value * selected_rate;
+        //     let fee_ = quantity_input_w.value * selected_rate;
 
-            amount_output_w.innerHTML = fee_.toFixed(2);
+        //     amount_output_w.innerHTML = fee_.toFixed(2);
 
-            let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
+        //     let mode_radio_selected_w = Array.from(mode_radio_w).find(radio => radio.checked);
 
-            if (mode_radio_selected_w.value == 1){
+        //     if (mode_radio_selected_w.value == 1){
 
-                asset_type_indicator = 'Withdrawal || eCurr - ' + short;
+        //         asset_type_indicator = 'Withdrawal || eCurr - ' + short;
 
-            } else {
+        //     } else {
 
-                asset_type_indicator = 'Withdrawal || Crypto - ' + short;
+        //         asset_type_indicator = 'Withdrawal || Crypto - ' + short;
                 
-            }
-        })
+        //     }
+        // })
 
         let sending_info = document.getElementById('sending-instructions_w');
 
@@ -2413,6 +2384,12 @@ jQuery(document).ready( function($){
                     
                 }
 
+                if (amount_input_w.value < 500){
+
+                    message += "Minimum Amount You can Withdraw is #500";
+                    
+                }
+
                 let sendin = sending_info.value;
 
                 if (sendin.length < 10 ){
@@ -2443,51 +2420,52 @@ jQuery(document).ready( function($){
 
                 formdata.append('info', sendin);
 
-            } else {
+            } 
+            // else {
 
-                // if (data.get('mode') == 1){
+            //     // if (data.get('mode') == 1){
 
-                // }
+            //     // }
 
-                if (quantity_input_w.value == 0 || quantity_input_w.value == ""){
+            //     if (quantity_input_w.value == 0 || quantity_input_w.value == ""){
 
-                    message += "Invalid Quantity";
+            //         message += "Invalid Quantity";
                     
-                }
+            //     }
 
-                let sendin = sending_info.value;
+            //     let sendin = sending_info.value;
 
-                if (sendin.length < 10 ){
+            //     if (sendin.length < 10 ){
 
-                    message += "<br>Sending Instruction requires a minimum of 10 characters";
+            //         message += "<br>Sending Instruction requires a minimum of 10 characters";
                     
-                }
+            //     }
 
-                // let account_balance = document.getElementById('account_balance');
+            //     // let account_balance = document.getElementById('account_balance');
 
-                // if (amount_input_w.value > account_balance.value ){
+            //     // if (amount_input_w.value > account_balance.value ){
 
-                //     message += "<br>Insufficient Balance";
+            //     //     message += "<br>Insufficient Balance";
                     
-                // }
+            //     // }
 
-                if ( message ){
-                    failure_message_w( message );
-                    message = "";
-                    return;
-                }
+            //     if ( message ){
+            //         failure_message_w( message );
+            //         message = "";
+            //         return;
+            //     }
 
-                let fee_ = formdata.get('quantity') * selected_rate;
+            //     let fee_ = formdata.get('quantity') * selected_rate;
 
-                let details_temp = asset_type_indicator + " || Withdrawal rate = " + selected_rate + " || Instructions - " + sendin;
+            //     let details_temp = asset_type_indicator + " || Withdrawal rate = " + selected_rate + " || Instructions - " + sendin;
 
-                formdata.append('amount_', fee_.toFixed(2));
+            //     formdata.append('amount_', fee_.toFixed(2));
 
-                formdata.append('details', details_temp );
+            //     formdata.append('details', details_temp );
 
-                formdata.append('info', sendin);
+            //     formdata.append('info', sendin);
 
-            }
+            // }
 
             formdata.append('action', 'hid_ex_m_debit_wallet');
 
