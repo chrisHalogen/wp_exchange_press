@@ -584,6 +584,10 @@ function hid_ex_m_get_giftcard_data( $asset_id ){
 
     $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$asset_id'");
 
+    if ( empty( $result ) ){
+        throw new Exception("giftcard not found", 1);
+    }
+
     return $result[0];
 }
 
@@ -622,6 +626,16 @@ function hid_ex_m_get_all_giftcard_orders(){
     $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
 
     $result = $wpdb->get_results("SELECT * FROM $table_name");
+
+    return $result;
+}
+
+function hid_ex_m_get_all_customer_giftcard_orders( $id ){
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_giftcard_orders';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name WHERE customer_id = '$id' ORDER BY time_stamp DESC");
 
     return $result;
 }
@@ -1108,6 +1122,16 @@ function hid_ex_m_get_all_sell_orders(){
     return $result;
 }
 
+function hid_ex_m_get_all_customer_sell_orders( $id ){
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_sell_orders';
+
+    $result = $wpdb->get_results("SELECT * FROM $table_name  WHERE customer_id = '$id' ORDER BY time_stamp DESC");
+
+    return $result;
+}
+
 function hid_ex_m_delete_sell_order( $order_id ){
 
     global $wpdb;
@@ -1187,6 +1211,34 @@ function hid_ex_m_get_asset_name($asset_type,$asset_id){
 
     }
 
+
+}
+
+function hid_ex_m_get_asset_buying_price($asset_type,$asset_id){
+
+    global $wpdb;
+
+    if ($asset_type == 1){
+
+        $table_name = $wpdb->prefix . 'hid_ex_m_e_currency_assets';
+
+        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$asset_id'");
+
+        $output_data = $result[0]->buying_price ;
+
+        return $output_data;
+
+    } else{
+
+        $table_name = $wpdb->prefix . 'hid_ex_m_crypto_currency_assets';
+
+        $result = $wpdb->get_results("SELECT * FROM $table_name WHERE id='$asset_id'");
+
+        $output_data = $result[0]->buying_price ;
+
+        return $output_data;
+
+    }
 
 }
 
@@ -1943,6 +1995,18 @@ function hid_ex_m_get_all_withdrawals(){
     $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
 
     $result = $wpdb->get_results("SELECT * from $table_name WHERE transaction_type = 2 ORDER BY time_stamp DESC");
+
+    return $result;
+
+}
+
+function hid_ex_m_get_all_customer_withdrawals( $id ){
+
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'hid_ex_m_wallet_transactions';
+
+    $result = $wpdb->get_results("SELECT * from $table_name WHERE customer_id = '$id' AND transaction_type = 2 ORDER BY time_stamp DESC");
 
     return $result;
 

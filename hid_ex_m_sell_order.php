@@ -458,7 +458,7 @@ function hid_ex_m_update_sell_order_view(){
                             <label for="quantity">Quantity</label>
                         </th>
                         <td>
-                        <input name="quantity" type="text" id="quantity"  class="regular-text" value=<?php echo $order_data->quantity_sold ?> oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" title="Only a decimal value is valid">
+                        <input name="quantity" type="text" id="quantity"  class="regular-text" value=<?php echo floatval($order_data->quantity_sold) ?> oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" title="Only a decimal value is valid">
                         <p class="description">What quantity is the customer willing to sell?</p>
                         </td>
                     </tr>
@@ -468,7 +468,7 @@ function hid_ex_m_update_sell_order_view(){
                             <label for="fee">Amount to Recieve</label>
                         </th>
                         <td>
-                        <p class="description" id="fee"><?php echo $order_data->amount_to_recieve ?></p>
+                        <p class="description" id="fee"><?php echo floatval($order_data->amount_to_recieve) ?></p>
                         <input type="hidden" id="hidden-fee" name="hidden-fee" value=<?php echo round($order_data->amount_to_recieve, 2) ?>>
 
                         <p class="description">The amount <strong>In Naira(#)</strong> at the rate of <strong><span id="rate-output">###</span></strong> the customer will be recieving. <br><strong>AutoUpdated</strong></p>
